@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <form action="/register" method="POST">
+
+        <div class="row d-flex justify-content-center">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" id = "emailField" name="email" placeholder="youremail@example.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" id = "username" name="username" placeholder="Username" type="text" required data-container="body" data-toggle="popover" data-placement="left" data-content="Too short or alredy exists">
+
+            </div>
+        </div>
+
+        <div class="row d-flex justify-content-center">
+            <div class="form-group">
+                <input class="form-control" id = "password" name="password" placeholder="Password" type="password" required>
+            </div>
+        </div>
+
+        <div class="row d-flex justify-content-center">
+            <div class="form-group">
+                <input class="form-control" id = "confirmation" name="confirmation" placeholder="Confirmation" type="password" required>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit" name="submit">Register</button>
+    </form>
+
+<script>
+var submitability_username = false;
+var submitability_email = false;
+var submitability_passwordMatched = false;
+$(document).ready(function(){
+    var user_input;
+    // as typing on username input field:
+    $('input[name="username"]').keyup(function(){
+        user_input = document.getElementById("username").value;
+        $.get('/check?username=' + user_input)
+            .done(function(response) {
+                if(response == true){
+                    // username's length is at least 2 and does not already belong to a user in the database (Check by/Check in application.py)=> GREEN border
+                     $('input[name="username"]').css("border-left-color", "palegreen");
+                     $('#username').popover('hide');
+                     console.log("Username available");
+                     submitability_username = true;
+                } //https://getbootstrap.com/docs/4.3/components/toasts/#toastdispose
+                else{
+                    // username's length is 1 and already belong to a user in the database => RED border
+                    $('input[name="username"]').css("border-left-color", "salmon");
+                    $('#username').popover('show');
+                    console.log("Username unavailable");
+                    submitability_username = false;
+                }
+            });
+    });
+
+    // implement check email with the server too.
+    var emailField;
+    var isValidEmail;
+    $('input[name="email"]').keyup(function(){
+        emailField = document.getElementById("emailField");
+        isValidEmail = emailField.checkValidity();
+
+        if ( isValidEmail ) {
+            console.log("email is valid");
+            submitability_email = true;
+        } else {
+            console.log("email is invalid");
+            submitability_email = false;
+        }
+    });
+
+    // Check password's existence
+    $('input[name="confirmation"]').keyup(function(){
+        var password;
+        password = document.getElementById("password").value;
+
+        if(password.length < 1){
+            console.log("Too short");
+            submitability_passwordMatched = false;
+        }
+    });
+
+
+    // check password and confirmation is matched
+    $('input[name="confirmation"]').keyup(function(){
+        var password;
+        password = document.getElementById("password").value;
+        var confirmation;
+        confirmation = document.getElementById("confirmation").value;
+
+        // check equality of the password and confirmation
+        if(password == confirmation){
+            // if password and confirmation are matched => approve to proceed
+            console.log("Password matched");
+            submitability_passwordMatched = true;
+        } else{
+            // if password and confirmation do not match => disapprove to proceed
+            console.log("Password did not match");
+            submitability_passwordMatched = false;
+        }
+     });
+
+
+
+    // SUBMITTABILITY
+    $( "form" ).submit(function( event ) {
+        if(submitability_username == true & submitability_email == true & submitability_passwordMatched == true){
+            $( "form" ).submit();
+        }
+        else{
+            event.preventDefault();
+        }
+    });
+
+});
+</script>
+{% endblock %}
