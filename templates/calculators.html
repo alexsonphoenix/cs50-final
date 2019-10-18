@@ -5,13 +5,40 @@
 {% endblock %}
 
 {% block main %}
-    <div>
-      Farming: Enter: Type of plant, Enter acreage, number of stool => water use and fertilizer use for farmers:
-      <br>
-      Finance: Enter:   lượng cà phê Thu được, chi phí
-      => lợi nhuận
-      <br>
-      …
+  <section class="farming_calculator">
+    <h3> Farming calculators </h3>
+    <div class="container">
+      <div class="row">
+        <!--Calculators-->
+        <div class="embeded_calculator">
+          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+             Open calculator
+          </button>
 
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              <iframe src='https://www.embed.com/app/calculator/gray-calculator.html' style='width: 400px; height: 400px;' scrolling='no' frameBorder='0'></iframe>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-6 col-6 d-flex justify-content-end">
+          <p>
+            Farming: Enter: Type of plant, Enter acreage, number of stool => water use and fertilizer use for farmers:
+            <br>
+            Finance: Enter:   lượng cà phê Thu được, chi phí
+            => lợi nhuận
+            <br>
+            …
+          </p>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <section class="finance_calculator">
+    <h3>Finance calculators</h3>
+  </section>
+
 {% endblock %}

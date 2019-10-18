@@ -39,7 +39,9 @@ db = SQL("sqlite:///farmNotes.db")
 @login_required
 def index():
     """Main """
-    render_template("index.html")
+    # Page Title
+    username = session["user_username"]
+    return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -86,6 +88,22 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
+
+@app.route("/check", methods=["GET"])
+def check():
+    """Return true if username available, else false, in JSON format"""
+    # get user's input from HTTP parameter passing from AJAX $.get
+    username_input = request.args.get("username")
+    print(username_input)
+    # Query database for existing usernames
+    username_database = db.execute("SELECT username FROM users")
+    username_database_list = [username_database[i]["username"] for i in range(len(username_database))]
+
+    # length at least 1 and does not already belong to a user in the database
+    if(len(username_input) > 1 and (username_input not in username_database_list)):
+        return jsonify(True)
+    else:
+        return jsonify(False)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -167,6 +185,30 @@ def changePassword():
 
         # after altering, require user to login again
         return render_template("login.html")
+
+
+@app.route("/yourFarm", methods=["GET", "POST"])
+@login_required
+def yourFarm():
+    # User reached route via GET (as by clicking a link or via redirect)
+    if request.method == "GET":
+        return render_template("yourFarm.html")
+
+
+@app.route("/yourNotes", methods=["GET", "POST"])
+@login_required
+def yourNotes():
+    # User reached route via GET (as by clicking a link or via redirect)
+    if request.method == "GET":
+        return render_template("yourNotes.html")
+
+
+@app.route("/calculators", methods=["GET", "POST"])
+@login_required
+def calculators():
+    # User reached route via GET (as by clicking a link or via redirect)
+    if request.method == "GET":
+        return render_template("calculators.html")
 
 
 def errorhandler(e):
