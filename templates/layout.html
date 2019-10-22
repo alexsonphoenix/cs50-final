@@ -35,12 +35,12 @@
             <div class="collapse navbar-collapse" id="navbar">
                 {% if session.user_id %}
                     <ul class="navbar-nav mr-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="/dailyNotes">Daily Notes</a></li>
                         <li class="nav-item"><a class="nav-link" href="/yourFarm">Your Farm</a></li>
                         <li class="nav-item"><a class="nav-link" href="/calculators">Farming Calculators</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/yourNotes">Your Notes</a></li>
                     </ul>
                     <ul class="navbar-nav ml-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/changePassword">Change password</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/setting">Setting</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                     </ul>
                 {% else %}
@@ -64,8 +64,12 @@
             {% block main %}{% endblock %}
         </main>
 
-        <footer class="small text-center text-muted">
-            Alex is building this fabulous website
+        <footer>
+          <div style="text-align: center">
+            <p>
+              Alex is building this fabulous website
+            </p>
+          </div>
         </footer>
 
     </body>

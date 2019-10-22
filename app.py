@@ -33,7 +33,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)    # to store information specific to a user from one request to the next
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///farmNotes.db")
+db = SQL("sqlite:///farmNote1.db")
 
 @app.route("/")
 @login_required
@@ -148,6 +148,16 @@ def register():
     else:
         return render_template("register.html")
 
+@app.route("/setting", methods=["GET", "POST"])
+@login_required
+def setting():
+    """Setting Page."""
+    # User reached route via GET (as by clicking a link or via redirect)
+    if request.method == "GET":
+        return render_template("setting.html")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+
 
 # Personal touch: allow users to change their passwords
 @app.route("/changePassword", methods=["GET", "POST"])
@@ -201,10 +211,10 @@ def calculators():
     return render_template("calculators.html")
 
 
-@app.route("/yourNotes")
+@app.route("/dailyNotes")
 @login_required
-def yourNotes():
-    return render_template("yourNotes.html")
+def dailyNotes():
+    return render_template("dailyNotes.html")
 
 
 def errorhandler(e):
