@@ -1,12 +1,13 @@
 {% extends "layout.html" %}
-
+{% import "bootstrap/wtf.html" as wtf %}
 {% block title %}
     Log In
 {% endblock %}
 
 {% block main %}
 
-  <form action="/login" method="post"
+  <form action="{{ url_for('login') }}" method="POST">
+    {{ form.csrf_token }}
     <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true" >
       <div class="modal-dialog" role="document">
@@ -18,21 +19,21 @@
             </button>
           </div>
           <div class="modal-body mx-3">
-            <div class="md-form mb-5">
-              <i class="fas fa-envelope prefix grey-text"></i>
-              <input type="text" id="defaultForm-email" class="form-control validate" name="username">
-              <label data-error="wrong" data-success="right" for="defaultForm-email">Your username</label>
-            </div>
-
-            <div class="md-form mb-4">
-              <i class="fas fa-lock prefix grey-text"></i>
-              <input type="password" id="defaultForm-pass" class="form-control validate" name="password">
-              <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
-            </div>
-
+            {{ wtf.form_field(form.username) }}
+            <ul>
+              {% for error in form.username.errors %}
+                <li style="color:red;"> {{error}} </li>
+              {% endfor %}
+            </ul>
+            {{ wtf.form_field(form.password) }}
+            <ul>
+              {% for error in form.password.errors %}
+                <li style="color:red;"> {{error}} </li>
+              {% endfor %}
+            </ul>
           </div>
           <div class="modal-footer d-flex justify-content-center">
-            <button class="btn btn-default" type="submit">Login</button>
+            <button class="btn btn-primary" type="submit">Login</button>
           </div>
         </div>
       </div>
