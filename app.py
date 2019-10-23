@@ -17,21 +17,24 @@ from flask_wtf.csrf import CSRFProtect
 from helpers import apology, login_required
 
 
+# To enable CSRF protection globally for a Flask app, register the CSRFProtect extension.
+csrf = CSRFProtect()
 
 # Configure application
 app = Flask(__name__)
 Bootstrap(app)
-
+csrf.init_app(app)  # apply it lazily
 
 # CSRF uses this key to prevent forms being submitted by people not on the route
-app.config['SECRET_KEY'] = '911fe2e60c2e152b08adbf0b9432bed0b2dd4003'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or \
+    'abc123ced456'
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Recaptcha by Google to ensure robots don't mess with the database
-app.config["RECAPTCHA_PUBLIC_KEY"] = '6Le30b4UAAAAAOm6ssR1O8_utiAVzll8fvT-5Osq'
-app.config["RECAPTCHA_PRIVATE_KEY"] = '6Le30b4UAAAAAGsIMurKZ7TPCijfGR0A9kld7LCG'
+app.config["RECAPTCHA_PUBLIC_KEY"] = '6LfJAL8UAAAAAH8h3LZbmm7F7w5Mi-VkhKZPc328'
+app.config["RECAPTCHA_PRIVATE_KEY"] = '6LfJAL8UAAAAAN7_Kwsc0uRGm0GrI9HOso2Ud-Ef'
 app.config["TESTING"] = True
 
 # Ensure responses aren't cached
@@ -72,7 +75,7 @@ def login():
     # Forget any user_id
     session.clear()
     form = LoginForm()
-    print(f'csrf_token: ' + session['csrf_token'])
+
     # User reached route via POST (as by submitting a form via POST)
     if form.validate_on_submit():
         # Ensure username was submitted
@@ -98,8 +101,7 @@ def login():
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("login.html", form = form)
+    return render_template("login.html", form = form)
 
 
 @app.route("/logout")
@@ -173,8 +175,19 @@ def register():
 
 # Form for setting route
 class settingForm(FlaskForm):
-    trackingYears = StringField('trackingYears')
-    crop = StringField('crop')
+    trackingYears = StringField('Tracking Years')
+
+    crop = StringField('Crop')
+    cropUnit = StringField('Crop Unit')
+
+    livestock = StringField('LiveStock')
+    livestockUnit = StringField('LiveStock Unit')
+
+    cropEx = StringField('Crop Expense')
+    cropExUnit = StringField('Crop Expense Unit')
+
+    livestockEx = StringField('LiveStock Expense')
+    livestockExUnit = StringField('LiveStock Expense Unit')
 
 
 @app.route("/setting", methods=["GET", "POST"])
@@ -182,11 +195,16 @@ class settingForm(FlaskForm):
 def setting():
     """Setting Page."""
     form = settingForm()
-    # User reached route via GET (as by clicking a link or via redirect)
-    if request.method == "GET":
+
+    # User reached route via POST (as by clicking a link or via redirect)
+    if form.validate_on_submit():
         return render_template("setting.html", form=form)
 
+
     # User reached route via GET (as by clicking a link or via redirect)
+    return render_template("setting.html", form=form)
+
+
 
 
 # Personal touch: allow users to change their passwords
