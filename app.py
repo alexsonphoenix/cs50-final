@@ -198,7 +198,7 @@ def setting():
 
     # User reached route via POST (as by clicking a link or via redirect)
     if form.validate_on_submit():
-        return render_template("setting.html", form=form)
+        return render_template("yourFarm.html")
 
 
     # User reached route via GET (as by clicking a link or via redirect)

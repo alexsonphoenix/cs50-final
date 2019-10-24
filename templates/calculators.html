@@ -5,15 +5,67 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container-fluid">
-      <div>
-        Farming: Enter: Type of plant, Enter acreage, number of stool => water use and fertilizer use for farmers:
-        <br>
-        Finance: Enter:   lượng cà phê Thu được, chi phí
-        => lợi nhuận
-        <br>
-        …
+    <div class="container">
+      <div class="row">
+        <div class="col-6 farming_calculator">
+          <h1>Farming Calculators</h1>
+          <h3>Water</h3>
+          <div class="row">
+            <input type="number" name="stump" id="stump" placeholder="Number of Stump">
+            <button> X </button>
+            <input type="number" name="water" id="water" placeholder="Amount of water per stump">
+          </div>
+          <button type="button" onclick="getElementById('water_result').innerHTML = water_calculate()"> = </button>
+          <span id="water_result"></span>
+
+        </div>
+
+        <div class="col-6 finance_calculator">
+          <h1>Finance Calculators</h1>
+
+          <h3>Get a loan?</h3>
+          <input type="number" name="loan_amount" placeholder="Borrow how much?">
+          <div class="row">
+            <input type="number" name="period" placeholder="Borrow for how long?">
+            <input type="number" name="interest" placeholder="Anual interest rate? %">
+          </div>
+          <div class="row">
+            <button type="button" onclick="getElementById('loan_result').innerHTML = loan_calculate()"> Calculate: </button>
+            <span id="loan_result"></span>
+          </div>
+        </div>
       </div>
     </div>
 
+<script type="text/javascript">
+
+  function water_calculate() {
+    stump = document.getElementById("stump").value;
+    water = document.getElementById("water").value;
+    return stump*water
+  }
+
+  // Monthly compounded function to calculate FV
+  function calculateFV(loan_amount,annualRate,years){
+    var months = years*12;
+    var monthlyRate = annualRate / 12 / 100;
+    var futureValue = 0;
+
+    for ( i = 1; i <= months; i++ ) {
+     futureValue = (futureValue + loan_amount) * (1 + monthlyRate);
+    }
+    return futureValue;
+  }
+
+  function loan_calculate() {
+    var loan_amount = document.getElementsByName("loan_amount").value;
+    var annualRate = document.getElementsByName("interest").value;
+    var years = document.getElementsByName("period").value;
+
+    var loan_result = calculateFV(loan_amount,annualRate,years);
+    
+    return loan_result;
+  }
+
+</script>
 {% endblock %}
