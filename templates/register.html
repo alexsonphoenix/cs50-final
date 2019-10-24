@@ -6,7 +6,7 @@
 
 {% block main %}
     <form action="/register" method="POST">
-
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="row d-flex justify-content-center">
             <div class="form-group">
                 <input autocomplete="off" autofocus class="form-control" id = "emailField" name="email" placeholder="youremail@example.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        
+
         <button class="btn btn-primary" type="submit" name="submit">Register</button>
     </form>
 

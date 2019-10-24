@@ -5,9 +5,27 @@
 {% endblock %}
 
 {% block main %}
-    <div>
-      1 form điền thông tin về farm: Enter 3 years of data to see improvement in productivity/ yield
-1 bảng display các statistics về farm + charts
+  <div class="container">
+    <div class="row">
+      <h2>Crops: </h2>
+      <table class="crops">
+        <tr>
+          <th>Tracking years: </th>
+          {% for year in trackingYears %}
+            <th scope="col">{{2019 - year}}</th>
+          {% endfor %}
+        </tr>
 
+        <tr>
+          <th>Yield: </th>
+          {% for year in trackingYears %}
+            <th scope="col">{{year}}</th>
+          {% endfor %}
+        </tr>
+      </table>
     </div>
+
+
+  </div>
+
 {% endblock %}

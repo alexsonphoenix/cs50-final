@@ -9,8 +9,8 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from fractions import Fraction
 from flask_wtf import RecaptchaField, FlaskForm
-from wtforms import StringField, DateTimeField, PasswordField
-from wtforms.validators import InputRequired, Length
+from wtforms import StringField, DateTimeField, PasswordField, IntegerField
+from wtforms.validators import InputRequired, Length, NumberRange
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 
@@ -52,7 +52,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)    # to store information specific to a user from one request to the next
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///farmNote1.db")
+db = SQL("sqlite:///farmNotes.db")
 
 @app.route("/")
 @login_required
@@ -175,17 +175,14 @@ def register():
 
 # Form for setting route
 class settingForm(FlaskForm):
-    trackingYears = StringField('Tracking Years')
+    trackingYears = IntegerField('Tracking Years')
 
     crop = StringField('Crop')
     cropUnit = StringField('Crop Unit')
-
     livestock = StringField('LiveStock')
     livestockUnit = StringField('LiveStock Unit')
-
     cropEx = StringField('Crop Expense')
     cropExUnit = StringField('Crop Expense Unit')
-
     livestockEx = StringField('LiveStock Expense')
     livestockExUnit = StringField('LiveStock Expense Unit')
 
@@ -198,6 +195,16 @@ def setting():
 
     # User reached route via POST (as by clicking a link or via redirect)
     if form.validate_on_submit():
+        # Add data into the database
+
+        # Query user in [users] table
+        user_query = db.execute("SELECT * FROM users WHERE id = :user_id",user_id = session["user_id"])
+
+        # update trackingYears: (Originally: NULL)
+        db.execute("UPDATE users SET trackingYears = :trackingYears WHERE id = :user_id", trackingYears=int(request.form.get("trackingYears")),
+                   user_id = session["user_id"])
+
+
         return render_template("yourFarm.html")
 
 
@@ -250,7 +257,9 @@ def changePassword():
 @app.route("/yourFarm")
 @login_required
 def yourFarm():
-    return render_template("yourFarm.html")
+    trackingYears = db.execute("SELECT trackingYears FROM users WHERE id =:user_id", user_id=session["user_id"])
+
+    return render_template("yourFarm.html", trackingYears=int(trackingYears))
 
 
 @app.route("/calculators")
