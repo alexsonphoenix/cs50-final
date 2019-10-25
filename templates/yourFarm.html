@@ -7,25 +7,66 @@
 {% block main %}
   <div class="container">
     <div class="row">
-      <h2>Crops: </h2>
-      <table class="crops">
-        <tr>
-          <th>Tracking years: </th>
-          {% for year in trackingYears %}
-            <th scope="col">{{2019 - year}}</th>
-          {% endfor %}
-        </tr>
+      <div class="col-6">
+        <h2>Crops: </h2>
+        <br>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Tracking years: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{2019 - year}}</th>
+              {% endfor %}
+            </tr>
+          </thead>
 
-        <tr>
-          <th>Yield: </th>
-          {% for year in trackingYears %}
-            <th scope="col">{{year}}</th>
-          {% endfor %}
-        </tr>
-      </table>
+          <tbody>
+            <tr>
+              <th>Yield: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{year}}</th>
+              {% endfor %}
+            </tr>
+            <tr>
+              <th>Revenue: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{year}}</th>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-6">
+        <h2>LiveStock: </h2>
+        <br>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Tracking years: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{2019 - year}}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <th>Yield: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{year}}</th>
+              {% endfor %}
+            </tr>
+            <tr>
+              <th>Revenue: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{year}}</th>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
-
   </div>
 
 {% endblock %}

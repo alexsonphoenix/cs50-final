@@ -175,16 +175,16 @@ def register():
 
 # Form for setting route
 class settingForm(FlaskForm):
-    trackingYears = IntegerField('Tracking Years')
+    trackingYears = IntegerField('Tracking Years', validators=[NumberRange(min=1, max=10, message="between 1 and 10")])
 
     crop = StringField('Crop')
-    cropUnit = StringField('Crop Unit')
+    cropUnit = StringField('Crop measurement')
     livestock = StringField('LiveStock')
-    livestockUnit = StringField('LiveStock Unit')
+    livestockUnit = StringField('LiveStock measurement')
     cropEx = StringField('Crop Expense')
-    cropExUnit = StringField('Crop Expense Unit')
+    cropExUnit = StringField('Crop Expense measurement')
     livestockEx = StringField('LiveStock Expense')
-    livestockExUnit = StringField('LiveStock Expense Unit')
+    livestockExUnit = StringField('LiveStock Expense measurement')
 
 
 @app.route("/setting", methods=["GET", "POST"])
@@ -197,15 +197,11 @@ def setting():
     if form.validate_on_submit():
         # Add data into the database
 
-        # Query user in [users] table
-        user_query = db.execute("SELECT * FROM users WHERE id = :user_id",user_id = session["user_id"])
-
         # update trackingYears: (Originally: NULL)
         db.execute("UPDATE users SET trackingYears = :trackingYears WHERE id = :user_id", trackingYears=int(request.form.get("trackingYears")),
                    user_id = session["user_id"])
 
-
-        return render_template("yourFarm.html")
+        return redirect("/yourFarm")
 
 
     # User reached route via GET (as by clicking a link or via redirect)
@@ -257,9 +253,10 @@ def changePassword():
 @app.route("/yourFarm")
 @login_required
 def yourFarm():
-    trackingYears = db.execute("SELECT trackingYears FROM users WHERE id =:user_id", user_id=session["user_id"])
-
-    return render_template("yourFarm.html", trackingYears=int(trackingYears))
+    # Query user in [users] table
+    user_query = db.execute("SELECT * FROM users WHERE id = :user_id",user_id = session["user_id"])
+    yearNum = int(user_query[0]["trackingYears"])
+    return render_template("yourFarm.html", trackingYears=yearNum)
 
 
 @app.route("/calculators")
