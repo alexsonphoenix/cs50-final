@@ -16,40 +16,8 @@
         {{ wtf.form_field(form.trackingYears, placeholder="Eg: 5") }}
       </div>
 
-      <div class="container">
-        <div class="row">
-          <div class="col-6">
-            <div class="crop bg-success">
-              {{ wtf.form_field(form.crop, placeholder="Eg: Wheet") }}
-              {{ wtf.form_field(form.cropUnit, placeholder="Eg: kilogram or hecta") }}
-            </div>
-            <br>
-            <hr>
-            <div class="livestock bg-info">
-              {{ wtf.form_field(form.livestock, placeholder="Eg: Chicken") }}
-              {{ wtf.form_field(form.livestockUnit, placeholder="Eg: unit") }}
-            </div>
-          </div>
-
-          <!-- Half screen -->
-
-          <div class="col-6">
-            <div class="cropEx bg-danger">
-              {{ wtf.form_field(form.cropEx, placeholder="Eg: Breeding seeds, or Fertilizer") }}
-              {{ wtf.form_field(form.cropExUnit, placeholder="Eg: US$") }}
-            </div>
-            <br>
-            <hr>
-            <div class="livestockEx bg-warning">
-              {{ wtf.form_field(form.livestockEx, placeholder="Eg: Food for Chicken") }}
-              {{ wtf.form_field(form.livestockExUnit, placeholder="Eg: US$") }}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="modal-footer d-flex justify-content-center">
-        <button class="btn btn-primary" type="submit">Add</button>
+        <button class="btn btn-primary" type="submit">Save</button>
       </div>
     </form>
 

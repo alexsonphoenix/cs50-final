@@ -175,16 +175,16 @@ def register():
 
 # Form for setting route
 class settingForm(FlaskForm):
-    trackingYears = IntegerField('Tracking Years', validators=[NumberRange(min=1, max=10, message="between 1 and 10")])
+    trackingYears = IntegerField('Tracking Years', validators=[NumberRange(min=1, max=7, message="between 1 and 7 years")])
 
-    crop = StringField('Crop')
-    cropUnit = StringField('Crop measurement')
-    livestock = StringField('LiveStock')
-    livestockUnit = StringField('LiveStock measurement')
-    cropEx = StringField('Crop Expense')
-    cropExUnit = StringField('Crop Expense measurement')
-    livestockEx = StringField('LiveStock Expense')
-    livestockExUnit = StringField('LiveStock Expense measurement')
+    #crop = StringField('Crop')
+    #cropUnit = StringField('Crop measurement')
+    #livestock = StringField('LiveStock')
+    #livestockUnit = StringField('LiveStock measurement')
+    #cropEx = StringField('Crop Expense')
+    #cropExUnit = StringField('Crop Expense measurement')
+    #livestockEx = StringField('LiveStock Expense')
+    #livestockExUnit = StringField('LiveStock Expense measurement')
 
 
 @app.route("/setting", methods=["GET", "POST"])
@@ -196,7 +196,7 @@ def setting():
     # User reached route via POST (as by clicking a link or via redirect)
     if form.validate_on_submit():
         # Add data into the database
-
+        print(request.form.get("trackingYears"))
         # update trackingYears: (Originally: NULL)
         db.execute("UPDATE users SET trackingYears = :trackingYears WHERE id = :user_id", trackingYears=int(request.form.get("trackingYears")),
                    user_id = session["user_id"])

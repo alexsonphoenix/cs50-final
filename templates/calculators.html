@@ -28,7 +28,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">VND</span>
             </div>
-            <input type="number" class="form-control" id="loan_amount" aria-label="Amount (to the nearest VND)" placeholder="Borrow how much?">
+            <input type="number" class="form-control" id="loan_amount" aria-label="Amount (to the nearest VND)" placeholder="Borrow how much?" onkeyup='addcomma()'>
             <div class="input-group-append">
               <span class="input-group-text">.00</span>
             </div>
@@ -55,18 +55,21 @@
             <input class="form-check-input" name="compounding" type="radio" id="monthly" value="monthly" checked="checked"> Monthly compounded (12/Y)
           </div>
 
-          <div class="row">
-            <button type="button" class="btn btn-outline-success" onclick="getElementById('loan_result').innerHTML = loan_calculate()" >Calculate</button>
-
-            <span id="loan_result"></span>
-          </div>
+          <button type="button" class="btn btn-outline-success row justify-content-center" onclick="getElementById('loan_result').innerHTML = loan_calculate()" >Calculate</button>
+          <span id="loan_result" class="row justify-content-center"></span>
         </div>
       </div>
     </div>
 
 <!-- Calculator Widget Copyright CalculatorSoup, LLC at www.calculatorsoup.com. Use is granted only if this statement and all links to www.calculatorsoup.com are maintained. --><a href="https://www.calculatorsoup.com/calculators/math/basic.php" onclick="window.open('https://www.calculatorsoup.com/calculators/math/basic.php?do=pop','Basic Calculator','width=400,height=600,toolbar=no,menubar=no,scrollbars=yes,resizable=yes');return false;">Basic Calculator</a>
 
+
 <script type="text/javascript">
+  function addcomma(){
+    input = document.getElementById("loan_amount");
+    processed = Number(input.value).toLocaleString('de-DE');
+    input.innerHTML = processed;
+  }
 
   function water_calculate(){
     stump = document.getElementById("stump").value;
@@ -103,10 +106,10 @@
     years = document.getElementById("period").value;
 
     if (document.getElementById('weekly').checked) {
-      return weeklyFV(loan_amount,annualRate,years);
+      return 'VND '+ weeklyFV(loan_amount,annualRate,years).toLocaleString(undefined, {maximumFractionDigits:2});
 
     }else if (document.getElementById('monthly').checked){
-      return monthlyFV(loan_amount,annualRate,years);
+      return 'VND '+ monthlyFV(loan_amount,annualRate,years).toLocaleString(undefined, {maximumFractionDigits:2});
     }
   }
 

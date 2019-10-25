@@ -6,6 +6,8 @@
 
 {% block main %}
   <div class="container">
+    <!--Incomes-->
+    <span class=" row justify-content-center text-success"><h2>Incomes from farm</h2></span>
     <div class="row">
       <div class="col-6">
         <h2>Crops: </h2>
@@ -59,6 +61,72 @@
             </tr>
             <tr>
               <th>Revenue: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{year}}</th>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr>
+
+    <!--Expenses-->
+    <span class=" row justify-content-center text-warning"><h2>Expenses in farm</h2></span>
+    <div class="row">
+      <div class="col-6">
+        <h2>Crop Expenses: </h2>
+        <br>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Tracking years: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{2019 - year}}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <th>Amount: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{year}}</th>
+              {% endfor %}
+            </tr>
+            <tr>
+              <th>Expenses: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{year}}</th>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-6">
+        <h2>LiveStock Expenses: </h2>
+        <br>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Tracking years: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{2019 - year}}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <th>Amount: </th>
+              {% for year in range(trackingYears) %}
+                <th scope="col">{{year}}</th>
+              {% endfor %}
+            </tr>
+            <tr>
+              <th>Expenses: </th>
               {% for year in range(trackingYears) %}
                 <th scope="col">{{year}}</th>
               {% endfor %}
