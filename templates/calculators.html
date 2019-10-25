@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-6 farming_calculator">
           <h1>Farming Calculators</h1>
-          <h3>Water</h3>
+          <h3>1. Water</h3>
           <div class="row">
             <input type="number" name="stump" id="stump" placeholder="Number of Stump">
             <button> X </button>
@@ -23,30 +23,70 @@
         <div class="col-6 finance_calculator">
           <h1>Finance Calculators</h1>
 
-          <h3>Get a loan?</h3>
-          <input type="number" name="loan_amount" placeholder="Borrow how much?">
-          <div class="row">
-            <input type="number" name="period" placeholder="Borrow for how long?">
-            <input type="number" name="interest" placeholder="Anual interest rate? %">
+          <h3>1. Get a loan?</h3>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">VND</span>
+            </div>
+            <input type="number" class="form-control" id="loan_amount" aria-label="Amount (to the nearest VND)" placeholder="Borrow how much?">
+            <div class="input-group-append">
+              <span class="input-group-text">.00</span>
+            </div>
           </div>
+
           <div class="row">
-            <button type="button" onclick="getElementById('loan_result').innerHTML = loan_calculate()"> Calculate: </button>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">years</span>
+              </div>
+              <input type="number" id="period" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Borrow for how long?">
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">%</span>
+              </div>
+              <input type="number" id="interest" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Anual interest rate? %">
+            </div>
+          </div>
+          <div class="compounding">
+            <input class="form-check-input" name="compounding" type="radio" id="weekly" value="weekly"> Weekly compounded (52/Y)
+            <br>
+            <input class="form-check-input" name="compounding" type="radio" id="monthly" value="monthly" checked="checked"> Monthly compounded (12/Y)
+          </div>
+
+          <div class="row">
+            <button type="button" class="btn btn-outline-success" onclick="getElementById('loan_result').innerHTML = loan_calculate()" >Calculate</button>
+
             <span id="loan_result"></span>
           </div>
         </div>
       </div>
     </div>
 
+<!-- Calculator Widget Copyright CalculatorSoup, LLC at www.calculatorsoup.com. Use is granted only if this statement and all links to www.calculatorsoup.com are maintained. --><a href="https://www.calculatorsoup.com/calculators/math/basic.php" onclick="window.open('https://www.calculatorsoup.com/calculators/math/basic.php?do=pop','Basic Calculator','width=400,height=600,toolbar=no,menubar=no,scrollbars=yes,resizable=yes');return false;">Basic Calculator</a>
+
 <script type="text/javascript">
 
-  function water_calculate() {
+  function water_calculate(){
     stump = document.getElementById("stump").value;
     water = document.getElementById("water").value;
     return stump*water
   }
+  // Weekly compounded function to calculate FV
+  function weeklyFV(loan_amount,annualRate,years){
+    var weeks = years*52;
+    var weeklyRate = annualRate / 52 / 100;
+    var futureValue = 0;
+
+    for ( i = 1; i <= weeks; i++ ) {
+     futureValue = (futureValue + loan_amount) * (1 + weeklyRate);
+    }
+    return futureValue;
+  }
 
   // Monthly compounded function to calculate FV
-  function calculateFV(loan_amount,annualRate,years){
+  function monthlyFV(loan_amount,annualRate,years){
     var months = years*12;
     var monthlyRate = annualRate / 12 / 100;
     var futureValue = 0;
@@ -58,13 +98,16 @@
   }
 
   function loan_calculate() {
-    var loan_amount = document.getElementsByName("loan_amount").value;
-    var annualRate = document.getElementsByName("interest").value;
-    var years = document.getElementsByName("period").value;
+    loan_amount = document.getElementById("loan_amount").value;
+    annualRate = document.getElementById("interest").value;
+    years = document.getElementById("period").value;
 
-    var loan_result = calculateFV(loan_amount,annualRate,years);
-    
-    return loan_result;
+    if (document.getElementById('weekly').checked) {
+      return weeklyFV(loan_amount,annualRate,years);
+
+    }else if (document.getElementById('monthly').checked){
+      return monthlyFV(loan_amount,annualRate,years);
+    }
   }
 
 </script>
