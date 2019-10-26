@@ -98,7 +98,7 @@ def login():
         session["user_username"] = rows[0]["username"]
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/dailyNotes")
 
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("login.html", form = form)
@@ -166,14 +166,15 @@ def register():
         session["user_id"] = just_registered[0]["id"]
         session["user_username"] = just_registered[0]["username"]
 
-        return redirect("/")
+        return redirect("/setting")
 
     # users reaching register via GET method
     else:
         return render_template("register.html")
 
 
-# Form for setting route
+# SETTING PAGE:
+# Forms for setting route
 class trackingYearsForm(FlaskForm):
     trackingYears = IntegerField('Tracking Years', validators=[NumberRange(min=1, max=7, message="between 1 and 7 years")])
     submit1 = SubmitField('Save')
@@ -181,22 +182,22 @@ class trackingYearsForm(FlaskForm):
 class cropForm(FlaskForm):
     crop_name = StringField('Crop Name')
     cropUnit = StringField('Crop Measurement')
-    submit2 = SubmitField('Save')
+    submit2 = SubmitField('Add')
 
 class cropExForm(FlaskForm):
     cropEx = StringField('Crop Expense')
     cropExUnit = StringField('Crop Expense measurement')
-    submit3 = SubmitField('Save')
+    submit3 = SubmitField('Add')
 
 class livestockForm(FlaskForm):
     livestock = StringField('LiveStock')
     livestockUnit = StringField('LiveStock measurement')
-    submit4 = SubmitField('Save')
+    submit4 = SubmitField('Add')
 
 class livestockExForm(FlaskForm):
     livestockEx = StringField('LiveStock Expense')
     livestockExUnit = StringField('LiveStock Expense measurement')
-    submit5 = SubmitField('Save')
+    submit5 = SubmitField('Add')
 
 @app.route("/setting", methods=["GET", "POST"])
 @login_required
@@ -224,26 +225,51 @@ def setting():
                         unit_name=request.form.get("form2-cropUnit"))
 
         return redirect("/setting")
+
     # User reached route via POST : HANDLING CROP EXPENSES SETTING
     if form3.submit3.data and form3.validate():
-        # insert CROP data into the database
-        db.execute("INSERT INTO cropExpenses (user_id, cropName, unitName) VALUES (:user_id, :crop_name, :unit_name)", user_id=session["user_id"],
-                        crop_name=request.form.get("form3-crop_name"),
-                        unit_name=request.form.get("form3-cropUnit"))
+        # insert CROP EXPENSE data into the database
+        db.execute("INSERT INTO cropExpenses (user_id, cropExName, cropExUnit) VALUES (:user_id, :cropEx, :cropExUnit)", user_id=session["user_id"],
+                        cropEx=request.form.get("form3-cropEx"),
+                        cropExUnit=request.form.get("form3-cropExUnit"))
 
         return redirect("/setting")
+
     # User reached route via POST : HANDLING LIVESTOCK SETTING
+    if form4.submit4.data and form4.validate():
+        # insert LIVESTOCK data into the database
+        db.execute("INSERT INTO livestocks (user_id, livestockName, livestockUnit) VALUES (:user_id, :livestock, :livestockUnit)", user_id=session["user_id"],
+                        livestock=request.form.get("form4-livestock"),
+                        livestockUnit=request.form.get("form4-livestockUnit"))
+
+        return redirect("/setting")
 
     # User reached route via POST : HANDLING LIVESTOCK EXPENSES SETTING
+    if form5.submit5.data and form5.validate():
+        # insert LIVESTOCK EXPENSE data into the database
+        db.execute("INSERT INTO livestockExpenses (user_id, livestockExName, livestockExUnit) VALUES (:user_id, :livestockEx, :livestockExUnit)", user_id=session["user_id"],
+                        livestockEx=request.form.get("form5-livestockEx"),
+                        livestockExUnit=request.form.get("form5-livestockExUnit"))
 
+        return redirect("/setting")
+
+
+
+    # Query to display current inventories
+    qry_crops = db.execute("SELECT * FROM crops WHERE user_id = :user_id", user_id=session["user_id"])
+    qry_cropEx = db.execute("SELECT * FROM cropExpenses WHERE user_id = :user_id", user_id=session["user_id"])
+    qry_livestocks = db.execute("SELECT * FROM livestocks WHERE user_id = :user_id", user_id=session["user_id"])
+    qry_livestockEx = db.execute("SELECT * FROM livestockExpenses WHERE user_id = :user_id", user_id=session["user_id"])
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("setting.html", form1=form1,
                                             form2=form2,
                                             form3=form3,
                                             form4=form4,
-                                            form5=form5)
-
-
+                                            form5=form5,
+                                            qry_crops=qry_crops,
+                                            qry_cropEx=qry_cropEx,
+                                            qry_livestocks=qry_livestocks,
+                                            qry_livestockEx=qry_livestockEx)
 
 
 # Personal touch: allow users to change their passwords
@@ -286,14 +312,14 @@ def changePassword():
         return render_template("login.html")
 
 
-@app.route("/yourFarm")
+@app.route("/yourFarm") # Only displaying
 @login_required
 def yourFarm():
     # Query user in [users] table
     user_query = db.execute("SELECT * FROM users WHERE id = :user_id",user_id = session["user_id"])
-    print(user_query[0]["trackingYears"])
-    yearNum = int(user_query[0]["trackingYears"])
-    return render_template("yourFarm.html", trackingYears=yearNum)
+
+
+    return render_template("yourFarm.html", trackingYears=int(user_query[0]["trackingYears"]))
 
 
 @app.route("/calculators")

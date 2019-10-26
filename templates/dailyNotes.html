@@ -5,8 +5,28 @@
 {% endblock %}
 
 {% block main %}
-    <div>
-      Lên lịch những điều cần làm.
-      
+    <div class="container">
+      <h1 class="text-center"> What's up on the farm! </h1>
+      <div class="row">
+        <div class="col-6">
+          <h1 class="text-center font-weight-light">Harvesting</h1>
+          <div class="row justify-content-center">
+            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalCropForm"><img src="static\images\harvestCrop.png" class="img-fluid" alt="Responsive image"><br>Harvest Crops</a>
+          </div>
+          <div class="row justify-content-center">
+            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLivestockForm"><img src="static\images\harvestLivestock.png" class="img-fluid" alt="Responsive image"><br>Harvest Livestocks</a>
+          </div>
+        </div>
+        <div class="col-6">
+          <h1 class="text-center font-weight-light">Spending</h1>
+          <div class="row justify-content-center">
+            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalCropExForm"><img src="static\images\spendCrop.png" class="img-fluid" alt="Responsive image"><br>Spend On Crops</a>
+          </div>
+          <div class="row justify-content-center">
+            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLivestockExForm"><img src="static\images\spendLivestock.png" class="img-fluid" alt="Responsive image"><br>Spend On Livestocks</a>
+          </div>
+        </div>
+      </div>
     </div>
+
 {% endblock %}
