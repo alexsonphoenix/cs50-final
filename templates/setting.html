@@ -10,15 +10,137 @@
       <a href="/changePassword"> Change Password </a>
     </div>
 
+    <!-- Tracking Years form -->
     <form class="" action="{{ url_for('setting') }}" method="POST">
       <div class="row justify-content-center" >
-        {{ form.csrf_token }}
-        {{ wtf.form_field(form.trackingYears, placeholder="Eg: 5") }}
-      </div>
-
-      <div class="modal-footer d-flex justify-content-center">
-        <button class="btn btn-primary" type="submit">Save</button>
+        {{ form1.csrf_token }}
+        {{ wtf.form_field(form1.trackingYears, placeholder="Eg: 5") }}
+        <span class="px-md-5 align-self-center">
+          {{ wtf.form_field(form1.submit1, class="btn btn-info justify-content-center") }}
+         </span>
       </div>
     </form>
 
+    <!-- Link to the 4 forms -->
+    <div class="container">
+      <div class="row align-items-end">
+        <div class="col-6 ">
+          <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalCropForm"><img src="static\images\crops.png" class="img-fluid" alt="Responsive image"><br>Crops</a>
+
+          <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalCropExForm"><img style="width: 128px; height:128px;" src="static\images\cropExpenses.png" class="img-fluid" alt="Responsive image"><br>Crop Expenses</a>
+        </div>
+
+        <div class="col-6">
+          <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLivestockForm"><img src="static\images\livestocks.png" class="img-fluid" alt="Responsive image"><br>Livestocks</a>
+
+          <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLivestockExForm"><img style="width: 128px; height:128px;" src="static\images\livestockExpenses.png" class="img-fluid" alt="Responsive image"><br>LiveStock Expenses</a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Crops form -->
+    <form action="{{ url_for('setting') }}" method="POST">
+      {{ form2.csrf_token }}
+      <div class="modal fade" id="modalCropForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">Crops Setting</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              {{ wtf.form_field(form2.crop_name, placeholder="Eg: Wheat") }}
+
+              {{ wtf.form_field(form2.cropUnit, placeholder ="Eg: Kilograms") }}
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              {{ wtf.form_field(form2.submit2, class="btn btn-info") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Crop Expenses form -->
+    <form action="{{ url_for('setting') }}" method="POST">
+      {{ form2.csrf_token }}
+      <div class="modal fade" id="modalCropExForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">Crop Expenses Setting</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              {{ wtf.form_field(form3.cropEx, placeholder="Eg: Fertilizer") }}
+              {{ wtf.form_field(form3.cropExUnit, placeholder ="Eg: Kilograms") }}
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              {{ wtf.form_field(form3.submit3, class="btn btn-info") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- LiveStock form -->
+    <form action="{{ url_for('setting') }}" method="POST">
+      {{ form2.csrf_token }}
+      <div class="modal fade" id="modalLivestockForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">LiveStock Setting</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              {{ wtf.form_field(form4.livestock, placeholder="Eg: Chicken") }}
+              {{ wtf.form_field(form4.livestockUnit, placeholder ="Eg: unit") }}
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              {{ wtf.form_field(form4.submit4, class="btn btn-info") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- LiveStock form -->
+    <form action="{{ url_for('setting') }}" method="POST">
+      {{ form2.csrf_token }}
+      <div class="modal fade" id="modalLivestockExForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">LiveStock Expenses Setting</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              {{ wtf.form_field(form5.livestockEx, placeholder="Eg: Poutry Food") }}
+              {{ wtf.form_field(form5.livestockExUnit, placeholder ="Eg: Kilograms") }}
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              {{ wtf.form_field(form5.submit5, class="btn btn-info") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
 {% endblock %}

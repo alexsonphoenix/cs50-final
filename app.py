@@ -9,7 +9,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from fractions import Fraction
 from flask_wtf import RecaptchaField, FlaskForm
-from wtforms import StringField, DateTimeField, PasswordField, IntegerField
+from wtforms import StringField, DateTimeField, PasswordField, IntegerField, SubmitField
 from wtforms.validators import InputRequired, Length, NumberRange
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
@@ -174,38 +174,74 @@ def register():
 
 
 # Form for setting route
-class settingForm(FlaskForm):
+class trackingYearsForm(FlaskForm):
     trackingYears = IntegerField('Tracking Years', validators=[NumberRange(min=1, max=7, message="between 1 and 7 years")])
+    submit1 = SubmitField('Save')
 
-    #crop = StringField('Crop')
-    #cropUnit = StringField('Crop measurement')
-    #livestock = StringField('LiveStock')
-    #livestockUnit = StringField('LiveStock measurement')
-    #cropEx = StringField('Crop Expense')
-    #cropExUnit = StringField('Crop Expense measurement')
-    #livestockEx = StringField('LiveStock Expense')
-    #livestockExUnit = StringField('LiveStock Expense measurement')
+class cropForm(FlaskForm):
+    crop_name = StringField('Crop Name')
+    cropUnit = StringField('Crop Measurement')
+    submit2 = SubmitField('Save')
 
+class cropExForm(FlaskForm):
+    cropEx = StringField('Crop Expense')
+    cropExUnit = StringField('Crop Expense measurement')
+    submit3 = SubmitField('Save')
+
+class livestockForm(FlaskForm):
+    livestock = StringField('LiveStock')
+    livestockUnit = StringField('LiveStock measurement')
+    submit4 = SubmitField('Save')
+
+class livestockExForm(FlaskForm):
+    livestockEx = StringField('LiveStock Expense')
+    livestockExUnit = StringField('LiveStock Expense measurement')
+    submit5 = SubmitField('Save')
 
 @app.route("/setting", methods=["GET", "POST"])
 @login_required
 def setting():
     """Setting Page."""
-    form = settingForm()
+    form1 = trackingYearsForm(prefix="form1")
+    form2 = cropForm(prefix="form2")
+    form3 = cropExForm(prefix="form3")
+    form4 = livestockForm(prefix="form4")
+    form5 = livestockExForm(prefix="form5")
 
-    # User reached route via POST (as by clicking a link or via redirect)
-    if form.validate_on_submit():
-        # Add data into the database
-        print(request.form.get("trackingYears"))
+    # User reached route via POST : HANDLING TRACKING YEARS SETTING
+    if form1.submit1.data and form1.validate():
         # update trackingYears: (Originally: NULL)
-        db.execute("UPDATE users SET trackingYears = :trackingYears WHERE id = :user_id", trackingYears=int(request.form.get("trackingYears")),
-                   user_id = session["user_id"])
+        db.execute("UPDATE users SET trackingYears = :trackingYears WHERE id = :user_id",    trackingYears=int(request.form.get("form1-trackingYears")),
+               user_id = session["user_id"])
 
-        return redirect("/yourFarm")
+        return redirect("/setting")
 
+    # User reached route via POST : HANDLING CROPS SETTING
+    if form2.submit2.data and form2.validate():
+        # insert CROP data into the database
+        db.execute("INSERT INTO crops (user_id, cropName, unitName) VALUES (:user_id, :crop_name, :unit_name)", user_id=session["user_id"],
+                        crop_name=request.form.get("form2-crop_name"),
+                        unit_name=request.form.get("form2-cropUnit"))
+
+        return redirect("/setting")
+    # User reached route via POST : HANDLING CROP EXPENSES SETTING
+    if form3.submit3.data and form3.validate():
+        # insert CROP data into the database
+        db.execute("INSERT INTO cropExpenses (user_id, cropName, unitName) VALUES (:user_id, :crop_name, :unit_name)", user_id=session["user_id"],
+                        crop_name=request.form.get("form3-crop_name"),
+                        unit_name=request.form.get("form3-cropUnit"))
+
+        return redirect("/setting")
+    # User reached route via POST : HANDLING LIVESTOCK SETTING
+
+    # User reached route via POST : HANDLING LIVESTOCK EXPENSES SETTING
 
     # User reached route via GET (as by clicking a link or via redirect)
-    return render_template("setting.html", form=form)
+    return render_template("setting.html", form1=form1,
+                                            form2=form2,
+                                            form3=form3,
+                                            form4=form4,
+                                            form5=form5)
 
 
 
@@ -255,6 +291,7 @@ def changePassword():
 def yourFarm():
     # Query user in [users] table
     user_query = db.execute("SELECT * FROM users WHERE id = :user_id",user_id = session["user_id"])
+    print(user_query[0]["trackingYears"])
     yearNum = int(user_query[0]["trackingYears"])
     return render_template("yourFarm.html", trackingYears=yearNum)
 
