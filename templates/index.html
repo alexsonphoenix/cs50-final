@@ -5,9 +5,31 @@
 {% endblock %}
 
 {% block main %}
-    <div>
-      Contents: những bài viết hữu ích Cho người nông dân
-      <br>
-      Link to Your Farm    và    Công cụ tính toán
+  <h1 class="text-center"> Farming with ease </h1>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <div class="row justify-content-center">
+          <a href="/" class="btn btn-default btn-rounded mb-4"><img src="static\images\1_newsfeed.png" class="img-fluid" alt="Responsive image"><br>1. NewsFeed</a>
+        </div>
+        <div class="row justify-content-center">
+          <a href="/dailyNotes" class="btn btn-default btn-rounded mb-4"><img src="static\images\2_dailyRecording.png" class="img-fluid" alt="Responsive image"><br>2. Daily Activities</a>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row justify-content-center">
+          <a href="/calculators" class="btn btn-default btn-rounded mb-4"><img src="static\images\3_calculators.png" class="img-fluid" alt="Responsive image" style="width:128px; height:128px"><br>3. Calculators</a>
+        </div>
+        <div class="row justify-content-center">
+          <a href="/yourFarm" class="btn btn-default btn-rounded mb-4"><img src="static\images\4_statistics.png" class="img-fluid" alt="Responsive image" style="width:128px; height:128px"><br>4. Statistics View</a>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <p>1. Stay up to date with latest farming practice and technology </p>
+  <p>2. Record daily farm activities </p>
+  <p>3. Calculators help plan your farming with ease </p>
+  <p>4. Statistics view of your farm give you insights on what's going on </p>
 {% endblock %}
