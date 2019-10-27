@@ -10,7 +10,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from fractions import Fraction
 from flask_wtf import RecaptchaField, FlaskForm
 from wtforms import StringField, DateField, PasswordField, IntegerField, SubmitField, SelectField, FloatField
-from wtforms.validators import InputRequired, Length, NumberRange
+from wtforms.validators import InputRequired, Length, NumberRange, DataRequired
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 from wtforms.fields.html5 import DateField
@@ -167,7 +167,7 @@ def register():
         session["user_id"] = just_registered[0]["id"]
         session["user_username"] = just_registered[0]["username"]
 
-        return redirect("/setting")
+        return redirect("/")
 
     # users reaching register via GET method
     else:
@@ -186,9 +186,7 @@ def qry_livestocks():
 # Query livestock expenses
 def qry_livestockEx():
     return db.execute("SELECT * FROM livestockExpenses WHERE user_id = :user_id", user_id=session["user_id"])
-# Query livestock expenses
-def qry_dailyHarvest():
-    return db.execute("SELECT * FROM dailyHarvest WHERE user_id = :user_id", user_id=session["user_id"])
+
 
 # SETTING PAGE:
 # Forms for setting route
@@ -273,10 +271,11 @@ def setting():
 
 
     # Query to display current inventories
-    qry_crops = qry_crops()
-    qry_cropEx = qry_cropEx()
-    qry_livestocks = qry_livestocks()
-    qry_livestockEx = qry_livestockEx()
+    qry_crops = db.execute("SELECT * FROM crops WHERE user_id = :user_id", user_id=session["user_id"])
+    qry_cropEx = db.execute("SELECT * FROM cropExpenses WHERE user_id = :user_id", user_id=session["user_id"])
+    qry_livestocks = db.execute("SELECT * FROM livestocks WHERE user_id = :user_id", user_id=session["user_id"])
+    qry_livestockEx = db.execute("SELECT * FROM livestockExpenses WHERE user_id = :user_id", user_id=session["user_id"])
+
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("setting.html", form1=form1,
                                             form2=form2,
@@ -347,10 +346,10 @@ def calculators():
 
 # Forms for dailyNotes
 class harvestCrop(FlaskForm):
-    dateNote = DateField('Choose Harvesting Date', format='%Y-%m-%d')
-    crop_name = SelectField(u'Choose Crop', choices=[])
-    crop_amount = FloatField('Harvesting Amount')
-    crop_money = FloatField('Monetary equivalent')
+    dateNote = DateField('Choose Harvesting Date', format='%Y-%m-%d', validators=[InputRequired(message="You need to enter the harvesting date")])
+    crop_name = SelectField(u'Choose Crop', choices=[], validators=[InputRequired(message="You need to enter the harvesting date")])
+    crop_amount = FloatField('Harvesting Amount', validators=[InputRequired(message="You need to enter the harvesting date")])
+    crop_money = FloatField('Monetary equivalent', validators=[InputRequired(message="You need to enter the harvesting date")])
     submit1 = SubmitField('Harvested')
 
 class harvestLivestock(FlaskForm):
@@ -377,6 +376,7 @@ class spendLivestock(FlaskForm):
 @app.route("/dailyNotes", methods=["GET", "POST"])
 @login_required
 def dailyNotes():
+    """dailyNotes Page."""
     form1 = harvestCrop(prefix="form1")
     form2 = harvestLivestock(prefix="form2")
     form3 = spendCrop(prefix="form3")
@@ -385,12 +385,11 @@ def dailyNotes():
     # User reached route via POST : HANDLING TRACKING YEARS SETTING
     if form1.submit1.data and form1.validate():
         # INSERT New Harvest CROP into dailyHarvest table:
-        db.execute("INSERT INTO dailyHarvest (user_id,dates,crop_id,crop_amount,crop_money) VALUES (:user_id, :dates, :crop_id, :crop_amount, :crop_money)",
-                user_id=session["user_id"],
-                dates=request.form.get("form1-dateNote"),
-                crop_id=request.form.get("form1-crop_name"),
-                crop_amount=request.form.get("form1-crop_amount"),
-                crop_money=request.form.get("form1-crop_money"))
+        db.execute("INSERT INTO dailyHarvest (user_id, dates, crop_id, crop_amount, crop_money) VALUES (:user_id, :dates, :crop_id, :crop_amount, :crop_money)",user_id=session["user_id"],
+                                            dates=request.form.get("form1-dateNote"),
+                                            crop_id=request.form.get("form1-crop_name"),
+                                            crop_amount=request.form.get("form1-crop_amount"),
+                                            crop_money=request.form.get("form1-crop_money"))
 
         # UPDATE Harvest amount into the co-responding year
         yearHarvest = request.form.get("form1-dateNote").year
