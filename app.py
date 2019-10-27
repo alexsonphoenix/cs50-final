@@ -9,11 +9,11 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from fractions import Fraction
 from flask_wtf import RecaptchaField, FlaskForm
-from wtforms import StringField, DateTimeField, PasswordField, IntegerField, SubmitField
+from wtforms import StringField, DateField, PasswordField, IntegerField, SubmitField, SelectField, FloatField
 from wtforms.validators import InputRequired, Length, NumberRange
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
-
+from wtforms.fields.html5 import DateField
 from helpers import apology, login_required
 
 
@@ -98,7 +98,7 @@ def login():
         session["user_username"] = rows[0]["username"]
 
         # Redirect user to home page
-        return redirect("/dailyNotes")
+        return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("login.html", form = form)
@@ -176,7 +176,7 @@ def register():
 # SETTING PAGE:
 # Forms for setting route
 class trackingYearsForm(FlaskForm):
-    trackingYears = IntegerField('Tracking Years', validators=[NumberRange(min=1, max=7, message="between 1 and 7 years")])
+    trackingYears = IntegerField('Tracking Years', validators=[NumberRange(min=1, max=10, message="between 1 and 10 years")])
     submit1 = SubmitField('Save')
 
 class cropForm(FlaskForm):
@@ -328,10 +328,37 @@ def calculators():
     return render_template("calculators.html")
 
 
+    # Query to display information
+    #qry_crops = db.execute("SELECT * FROM crops WHERE user_id = :user_id", user_id=session["user_id"])
+    #crop_name_list = [qry_crops[i]["cropName"] for i in range(len(qry_crops))]
+    #print(crop_name_list)
+# Forms for dailyNotes
+class harvestCrop(FlaskForm):
+    dateNote = DateField('Choose Harvest Date', format='%Y-%m-%d')
+    crop_name = SelectField(u'Choose Crop', choices=[('cpp', 'C++'), ('py', 'Python'), ('text', 'Plain Text')])
+    crop_amount = FloatField('Harvesting Amount')
+    crop_money = FloatField('Monetary equivalent')
+    submit1 = SubmitField('Save')
+
 @app.route("/dailyNotes")
 @login_required
 def dailyNotes():
-    return render_template("dailyNotes.html")
+    form1 = harvestCrop(prefix="form1")
+    #form2 = cropForm(prefix="form2")
+    #form3 = cropExForm(prefix="form3")
+    #form4 = livestockForm(prefix="form4")
+    #form5 = livestockExForm(prefix="form5")
+
+    # User reached route via POST : HANDLING TRACKING YEARS SETTING
+    if form1.submit1.data and form1.validate():
+        # update trackingYears: (Originally: NULL)
+        return redirect("/dailyNotes")
+
+
+
+    # User reached route via GET : SHOWING INPUT FORM
+
+    return render_template("dailyNotes.html", form1=form1)
 
 
 def errorhandler(e):

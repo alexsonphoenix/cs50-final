@@ -10,15 +10,32 @@
         <div class="col-6 farming_calculator">
           <h1>Farming Calculators</h1>
           <h3>1. Water</h3>
-          <div class="row">
-            <input type="number" name="stump" id="stump" placeholder="Number of Stump">
-            <button> X </button>
-            <input type="number" name="water" id="water" placeholder="Amount of water per stump">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Stump</span>
+            </div>
+            <input type="number" class="form-control" name="stump" id="stump" aria-label=" Number of stump of trees" placeholder="Number of Stump">
+            <div class="input-group-append">
+              <span class="input-group-text"></span>
+            </div>
           </div>
-          <button type="button" onclick="getElementById('water_result').innerHTML = water_calculate()"> = </button>
-          <span id="water_result"></span>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">L</span>
+            </div>
+            <input type="number" name="water" class="form-control" id="water" aria-label="Amount of water for each stump" placeholder="Amount of water per stump">
+            <div class="input-group-append">
+              <span class="input-group-text"></span>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-outline-success row justify-content-center" onclick="getElementById('water_result').innerHTML = water_calculate()"> Calculate </button>
+          <span id="water_result" class="row justify-content-center"></span>
 
         </div>
+
+        <!-- Half page -->
 
         <div class="col-6 finance_calculator">
           <h1>Finance Calculators</h1>
@@ -74,7 +91,7 @@
   function water_calculate(){
     stump = document.getElementById("stump").value;
     water = document.getElementById("water").value;
-    return stump*water
+    return (stump*water).toLocaleString(undefined, {maximumFractionDigits:2}) + ' L';
   }
   // Weekly compounded function to calculate FV
   function weeklyFV(loan_amount,annualRate,years){

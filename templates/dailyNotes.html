@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-
+{% import "bootstrap/wtf.html" as wtf %}
 {% block title %}
     Your Notes
 {% endblock %}
@@ -11,22 +11,48 @@
         <div class="col-6">
           <h1 class="text-center font-weight-light">Harvesting</h1>
           <div class="row justify-content-center">
-            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalCropForm"><img src="static\images\harvestCrop.png" class="img-fluid" alt="Responsive image"><br>Harvest Crops</a>
+            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalHarvestCrop"><img src="static\images\harvestCrop.png" class="img-fluid" alt="Responsive image"><br>Harvest Crops</a>
           </div>
           <div class="row justify-content-center">
-            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLivestockForm"><img src="static\images\harvestLivestock.png" class="img-fluid" alt="Responsive image"><br>Harvest Livestocks</a>
+            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalHarvestLivestock"><img src="static\images\harvestLivestock.png" class="img-fluid" alt="Responsive image"><br>Harvest Livestocks</a>
           </div>
         </div>
         <div class="col-6">
           <h1 class="text-center font-weight-light">Spending</h1>
           <div class="row justify-content-center">
-            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalCropExForm"><img src="static\images\spendCrop.png" class="img-fluid" alt="Responsive image"><br>Spend On Crops</a>
+            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalSpendCrop"><img src="static\images\spendCrop.png" class="img-fluid" alt="Responsive image"><br>Spend On Crops</a>
           </div>
           <div class="row justify-content-center">
-            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLivestockExForm"><img src="static\images\spendLivestock.png" class="img-fluid" alt="Responsive image"><br>Spend On Livestocks</a>
+            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalSpendLivestock"><img src="static\images\spendLivestock.png" class="img-fluid" alt="Responsive image"><br>Spend On Livestocks</a>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Harvest Crops Form -->
+    <form action="{{ url_for('dailyNotes') }}" method="POST">
+      {{ form1.csrf_token }}
+      <div class="modal fade" id="modalHarvestCrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">Harvest Crops</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              {{ wtf.form_field(form1.dateNote) }}
+              {{ wtf.form_field(form1.crop_name) }}
+              {{ wtf.form_field(form1.crop_amount) }}
+              {{ wtf.form_field(form1.crop_money, placeholder="$") }}
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              {{ wtf.form_field(form1.submit1, class="btn btn-info") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
 {% endblock %}
