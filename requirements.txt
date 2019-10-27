@@ -1,0 +1,11 @@
+cs50
+Flask
+requests
+flask_session
+tempfile
+flask_wtf
+wtforms
+wtforms.validators
+flask_bootstrap
+flask_wtf.csrf
+wtforms.fields.html5

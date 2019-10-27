@@ -55,4 +55,86 @@
         </div>
       </div>
     </form>
+
+    <!-- Harvest Livestock Form -->
+    <form action="{{ url_for('dailyNotes') }}" method="POST">
+      {{ form2.csrf_token }}
+      <div class="modal fade" id="modalHarvestLivestock" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">Harvest Livestocks</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              {{ wtf.form_field(form2.dateNote) }}
+              {{ wtf.form_field(form2.livestock_name) }}
+              {{ wtf.form_field(form2.livestock_amount) }}
+              {{ wtf.form_field(form2.livestock_money, placeholder="$") }}
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              {{ wtf.form_field(form2.submit2, class="btn btn-info") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Spending CROP EXPENSES Form -->
+    <form action="{{ url_for('dailyNotes') }}" method="POST">
+      {{ form3.csrf_token }}
+      <div class="modal fade" id="modalSpendCrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">Crop Expenses</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              {{ wtf.form_field(form3.dateNote) }}
+              {{ wtf.form_field(form3.cropEx_name) }}
+              {{ wtf.form_field(form3.cropEx_amount) }}
+              {{ wtf.form_field(form3.cropEx_money, placeholder="$") }}
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              {{ wtf.form_field(form3.submit3, class="btn btn-info") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Spending LIVESTOCK EXPENSES Form -->
+    <form action="{{ url_for('dailyNotes') }}" method="POST">
+      {{ form4.csrf_token }}
+      <div class="modal fade" id="modalSpendLivestock" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">Livestock Expenses</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              {{ wtf.form_field(form4.dateNote) }}
+              {{ wtf.form_field(form4.livestockEx_name) }}
+              {{ wtf.form_field(form4.livestockEx_amount) }}
+              {{ wtf.form_field(form4.livestockEx_money, placeholder="$") }}
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              {{ wtf.form_field(form4.submit4, class="btn btn-info") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
 {% endblock %}

@@ -14,6 +14,7 @@ from wtforms.validators import InputRequired, Length, NumberRange
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 from wtforms.fields.html5 import DateField
+
 from helpers import apology, login_required
 
 
@@ -172,6 +173,22 @@ def register():
     else:
         return render_template("register.html")
 
+# QUERY to display
+# Query Crops
+def qry_crops():
+    return db.execute("SELECT * FROM crops WHERE user_id = :user_id", user_id=session["user_id"])
+# Query Crop Expenses
+def qry_cropEx():
+    return db.execute("SELECT * FROM cropExpenses WHERE user_id = :user_id", user_id=session["user_id"])
+# Query livestocks
+def qry_livestocks():
+    return db.execute("SELECT * FROM livestocks WHERE user_id = :user_id", user_id=session["user_id"])
+# Query livestock expenses
+def qry_livestockEx():
+    return db.execute("SELECT * FROM livestockExpenses WHERE user_id = :user_id", user_id=session["user_id"])
+# Query livestock expenses
+def qry_dailyHarvest():
+    return db.execute("SELECT * FROM dailyHarvest WHERE user_id = :user_id", user_id=session["user_id"])
 
 # SETTING PAGE:
 # Forms for setting route
@@ -256,10 +273,10 @@ def setting():
 
 
     # Query to display current inventories
-    qry_crops = db.execute("SELECT * FROM crops WHERE user_id = :user_id", user_id=session["user_id"])
-    qry_cropEx = db.execute("SELECT * FROM cropExpenses WHERE user_id = :user_id", user_id=session["user_id"])
-    qry_livestocks = db.execute("SELECT * FROM livestocks WHERE user_id = :user_id", user_id=session["user_id"])
-    qry_livestockEx = db.execute("SELECT * FROM livestockExpenses WHERE user_id = :user_id", user_id=session["user_id"])
+    qry_crops = qry_crops()
+    qry_cropEx = qry_cropEx()
+    qry_livestocks = qry_livestocks()
+    qry_livestockEx = qry_livestockEx()
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("setting.html", form1=form1,
                                             form2=form2,
@@ -328,29 +345,68 @@ def calculators():
     return render_template("calculators.html")
 
 
-    # Query to display information
-    #qry_crops = db.execute("SELECT * FROM crops WHERE user_id = :user_id", user_id=session["user_id"])
-    #crop_name_list = [qry_crops[i]["cropName"] for i in range(len(qry_crops))]
-    #print(crop_name_list)
 # Forms for dailyNotes
 class harvestCrop(FlaskForm):
-    dateNote = DateField('Choose Harvest Date', format='%Y-%m-%d')
-    crop_name = SelectField(u'Choose Crop', choices=[('cpp', 'C++'), ('py', 'Python'), ('text', 'Plain Text')])
+    dateNote = DateField('Choose Harvesting Date', format='%Y-%m-%d')
+    crop_name = SelectField(u'Choose Crop', choices=[])
     crop_amount = FloatField('Harvesting Amount')
     crop_money = FloatField('Monetary equivalent')
-    submit1 = SubmitField('Save')
+    submit1 = SubmitField('Harvested')
 
-@app.route("/dailyNotes")
+class harvestLivestock(FlaskForm):
+    dateNote = DateField('Choose Harvesting Date', format='%Y-%m-%d')
+    livestock_name = SelectField(u'Choose Livestock', choices=[])
+    livestock_amount = FloatField('Harvesting Amount')
+    livestock_money = FloatField('Monetary equivalent')
+    submit2 = SubmitField('Harvested')
+
+class spendCrop(FlaskForm):
+    dateNote = DateField('Choose Spending Date', format='%Y-%m-%d')
+    cropEx_name = SelectField(u'Choose Crop Expense', choices=[])
+    cropEx_amount = FloatField('Spending Amount')
+    cropEx_money = FloatField('Monetary equivalent')
+    submit3 = SubmitField('Spent')
+
+class spendLivestock(FlaskForm):
+    dateNote = DateField('Choose Spending Date', format='%Y-%m-%d')
+    livestockEx_name = SelectField(u'Choose Livestock Expense', choices=[])
+    livestockEx_amount = FloatField('Spending Amount')
+    livestockEx_money = FloatField('Monetary equivalent')
+    submit4 = SubmitField('Spent')
+
+@app.route("/dailyNotes", methods=["GET", "POST"])
 @login_required
 def dailyNotes():
     form1 = harvestCrop(prefix="form1")
-    #form2 = cropForm(prefix="form2")
-    #form3 = cropExForm(prefix="form3")
-    #form4 = livestockForm(prefix="form4")
-    #form5 = livestockExForm(prefix="form5")
+    form2 = harvestLivestock(prefix="form2")
+    form3 = spendCrop(prefix="form3")
+    form4 = spendLivestock(prefix="form4")
 
     # User reached route via POST : HANDLING TRACKING YEARS SETTING
     if form1.submit1.data and form1.validate():
+        # INSERT New Harvest CROP into dailyHarvest table:
+        db.execute("INSERT INTO dailyHarvest (user_id,dates,crop_id,crop_amount,crop_money) VALUES (:user_id, :dates, :crop_id, :crop_amount, :crop_money)",
+                user_id=session["user_id"],
+                dates=request.form.get("form1-dateNote"),
+                crop_id=request.form.get("form1-crop_name"),
+                crop_amount=request.form.get("form1-crop_amount"),
+                crop_money=request.form.get("form1-crop_money"))
+
+        # UPDATE Harvest amount into the co-responding year
+        yearHarvest = request.form.get("form1-dateNote").year
+        print(yearHarvest)
+        print(qry_dailyHarvest[0])
+        return redirect("/dailyNotes")
+
+    if form2.submit2.data and form2.validate():
+        # update trackingYears: (Originally: NULL)
+        return redirect("/dailyNotes")
+
+    if form3.submit3.data and form3.validate():
+        # update trackingYears: (Originally: NULL)
+        return redirect("/dailyNotes")
+
+    if form4.submit4.data and form4.validate():
         # update trackingYears: (Originally: NULL)
         return redirect("/dailyNotes")
 
@@ -358,7 +414,26 @@ def dailyNotes():
 
     # User reached route via GET : SHOWING INPUT FORM
 
-    return render_template("dailyNotes.html", form1=form1)
+    # Fill in choices for Harvest CROP form
+    crops = qry_crops()
+    form1.crop_name.choices = [(crop["id"],crop["cropName"]) for crop in crops]
+
+    # Fill in choices for Harvest LIVESTOCK form
+    livestocks = qry_livestocks()
+    form2.livestock_name.choices = [(livestock["id"],livestock["livestockName"]) for livestock in livestocks]
+
+    # Fill in choices for Spending CROP EXPENSES form
+    cropExs = qry_cropEx()
+    form3.cropEx_name.choices = [(cropEx["id"],cropEx["cropExName"]) for cropEx in cropExs]
+
+    # Fill in choices for Spending LIVESTOCK EXPENSESform
+    livestockExs = qry_livestockEx()
+    form4.livestockEx_name.choices = [(livestockEx["id"],livestockEx["livestockExName"]) for livestockEx in livestockExs]
+
+    return render_template("dailyNotes.html", form1=form1,
+                                                form2=form2,
+                                                form3=form3,
+                                                form4=form4)
 
 
 def errorhandler(e):
