@@ -383,32 +383,32 @@ def dailyNotes():
     form4 = spendLivestock(prefix="form4")
 
     # User reached route via POST : HANDLING TRACKING YEARS SETTING
-    if form1.submit1.data and form1.validate():
-        # INSERT New Harvest CROP into dailyHarvest table:
-        db.execute("INSERT INTO dailyHarvest (user_id, dates, crop_id, crop_amount, crop_money) VALUES (:user_id, :dates, :crop_id, :crop_amount, :crop_money)",user_id=session["user_id"],
-                                            dates=request.form.get("form1-dateNote"),
-                                            crop_id=request.form.get("form1-crop_name"),
-                                            crop_amount=request.form.get("form1-crop_amount"),
-                                            crop_money=request.form.get("form1-crop_money"))
+    if request.method == 'POST':
+        if form1.submit1.data and form1.validate():
+            # INSERT New Harvest CROP into dailyHarvest table:
+            db.execute("INSERT INTO dailyHarvest (user_id, dates, crop_id, crop_amount, crop_money) VALUES (:user_id, :dates, :crop_id, :crop_amount, :crop_money)",user_id=session["user_id"],
+                                                dates=request.form.get("form1-dateNote"),
+                                                crop_id=request.form.get("form1-crop_name"),
+                                                crop_amount=request.form.get("form1-crop_amount"),
+                                                crop_money=request.form.get("form1-crop_money"))
 
-        # UPDATE Harvest amount into the co-responding year
-        yearHarvest = request.form.get("form1-dateNote").year
-        print(yearHarvest)
-        print(qry_dailyHarvest[0])
-        return redirect("/dailyNotes")
+            # UPDATE Harvest amount into the co-responding year
+            yearHarvest = request.form.get("form1-dateNote").year
+            print(yearHarvest)
+            print(qry_dailyHarvest[0])
+            return redirect("/dailyNotes")
 
-    if form2.submit2.data and form2.validate():
-        # update trackingYears: (Originally: NULL)
-        return redirect("/dailyNotes")
+        if form2.submit2.data and form2.validate():
+            # update trackingYears: (Originally: NULL)
+            return redirect("/dailyNotes")
 
-    if form3.submit3.data and form3.validate():
-        # update trackingYears: (Originally: NULL)
-        return redirect("/dailyNotes")
+        if form3.submit3.data and form3.validate():
+            # update trackingYears: (Originally: NULL)
+            return redirect("/dailyNotes")
 
-    if form4.submit4.data and form4.validate():
-        # update trackingYears: (Originally: NULL)
-        return redirect("/dailyNotes")
-
+        if form4.submit4.data and form4.validate():
+            # update trackingYears: (Originally: NULL)
+            return redirect("/dailyNotes")
 
 
     # User reached route via GET : SHOWING INPUT FORM
