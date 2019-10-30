@@ -346,31 +346,31 @@ def calculators():
 
 # Forms for dailyNotes
 class harvestCrop(FlaskForm):
-    dateNote = DateField('Choose Harvesting Date', format='%Y-%m-%d', validators=[InputRequired(message="You need to enter the harvesting date")])
-    crop_name = SelectField(u'Choose Crop', choices=[], validators=[InputRequired(message="You need to enter the harvesting date")])
-    crop_amount = FloatField('Harvesting Amount', validators=[InputRequired(message="You need to enter the harvesting date")])
-    crop_money = FloatField('Monetary equivalent', validators=[InputRequired(message="You need to enter the harvesting date")])
+    dateNote1 = DateField('Choose Harvesting Date', format='%Y-%m-%d')
+    crop_name = SelectField('Choose Crop', choices=[])
+    crop_amount = FloatField('Harvesting Amount')
+    crop_money = FloatField('Monetary equivalent')
     submit1 = SubmitField('Harvested')
 
 class harvestLivestock(FlaskForm):
-    dateNote = DateField('Choose Harvesting Date', format='%Y-%m-%d')
-    livestock_name = SelectField(u'Choose Livestock', choices=[])
-    livestock_amount = FloatField('Harvesting Amount')
-    livestock_money = FloatField('Monetary equivalent')
+    dateNote2 = DateField('Choose Harvesting Date', format='%Y-%m-%d', validators=[InputRequired()])
+    livestock_name = SelectField(u'Choose Livestock', choices=[], validators= [InputRequired()])
+    livestock_amount = FloatField('Harvesting Amount', validators=[InputRequired()])
+    livestock_money = FloatField('Monetary equivalent', validators=[InputRequired()])
     submit2 = SubmitField('Harvested')
 
 class spendCrop(FlaskForm):
-    dateNote = DateField('Choose Spending Date', format='%Y-%m-%d')
-    cropEx_name = SelectField(u'Choose Crop Expense', choices=[])
-    cropEx_amount = FloatField('Spending Amount')
-    cropEx_money = FloatField('Monetary equivalent')
+    dateNote3 = DateField('Choose Spending Date', format='%Y-%m-%d',validators= [InputRequired()])
+    cropEx_name = SelectField(u'Choose Crop Expense', choices=[], validators=[InputRequired()])
+    cropEx_amount = FloatField('Spending Amount', validators=[InputRequired()])
+    cropEx_money = FloatField('Monetary equivalent', validators=[InputRequired()])
     submit3 = SubmitField('Spent')
 
 class spendLivestock(FlaskForm):
-    dateNote = DateField('Choose Spending Date', format='%Y-%m-%d')
-    livestockEx_name = SelectField(u'Choose Livestock Expense', choices=[])
-    livestockEx_amount = FloatField('Spending Amount')
-    livestockEx_money = FloatField('Monetary equivalent')
+    dateNote4 = DateField('Choose Spending Date', format='%Y-%m-%d', validators=[InputRequired()])
+    livestockEx_name = SelectField(u'Choose Livestock Expense', choices=[], validators=[InputRequired()])
+    livestockEx_amount = FloatField('Spending Amount', validators=[InputRequired()])
+    livestockEx_money = FloatField('Monetary equivalent', validators=[InputRequired()])
     submit4 = SubmitField('Spent')
 
 @app.route("/dailyNotes", methods=["GET", "POST"])
@@ -383,36 +383,40 @@ def dailyNotes():
     form4 = spendLivestock(prefix="form4")
 
     # User reached route via POST : HANDLING TRACKING YEARS SETTING
-    if request.method == 'POST':
-        if form1.submit1.data and form1.validate():
-            # INSERT New Harvest CROP into dailyHarvest table:
-            db.execute("INSERT INTO dailyHarvest (user_id, dates, crop_id, crop_amount, crop_money) VALUES (:user_id, :dates, :crop_id, :crop_amount, :crop_money)",user_id=session["user_id"],
-                                                dates=request.form.get("form1-dateNote"),
-                                                crop_id=request.form.get("form1-crop_name"),
-                                                crop_amount=request.form.get("form1-crop_amount"),
-                                                crop_money=request.form.get("form1-crop_money"))
+    print(form1.submit1.data)
+    print("If False: serving GET If True: serving POST")
 
-            # UPDATE Harvest amount into the co-responding year
-            yearHarvest = request.form.get("form1-dateNote").year
-            print(yearHarvest)
-            print(qry_dailyHarvest[0])
-            return redirect("/dailyNotes")
+    if form1.submit1.data and form1.validate_on_submit():
+        print("Form 1 is submitted and validated")
+        # INSERT New Harvest CROP into dailyHarvestCrop table:
+        db.execute("INSERT INTO dailyHarvestCrop (user_id, dates, crop_id, crop_amount, crop_money) VALUES (:user_id, :dates, :crop_id, :crop_amount, :crop_money)", user_id=session["user_id"],
+                                            dates=request.form.get("form1-dateNote1"),
+                                            crop_id=int(request.form.get("form1-crop_name")),
+                                            crop_amount=float(request.form.get("form1-crop_amount")),
+                                            crop_money=float(request.form.get("form1-crop_money")))
 
-        if form2.submit2.data and form2.validate():
-            # update trackingYears: (Originally: NULL)
-            return redirect("/dailyNotes")
+        return redirect("/dailyNotes")
+        # UPDATE Harvest amount into the co-responding year
+        #yearHarvest = request.form.get("form1-dateNote").year
+        #print(yearHarvest)
+        #print(qry_dailyHarvest[0])
 
-        if form3.submit3.data and form3.validate():
-            # update trackingYears: (Originally: NULL)
-            return redirect("/dailyNotes")
 
-        if form4.submit4.data and form4.validate():
-            # update trackingYears: (Originally: NULL)
-            return redirect("/dailyNotes")
+    if form2.submit2.data and form2.validate_on_submit():
+        # update trackingYears: (Originally: NULL)
+        return redirect("/dailyNotes")
+
+    if form3.submit3.data and form3.validate_on_submit():
+        # update trackingYears: (Originally: NULL)
+        return redirect("/dailyNotes")
+
+    if form4.submit4.data and form4.validate_on_submit():
+        # update trackingYears: (Originally: NULL)
+        return redirect("/dailyNotes")
 
 
     # User reached route via GET : SHOWING INPUT FORM
-
+    print("Serving GET requessttt NOWWWWWW")
     # Fill in choices for Harvest CROP form
     crops = qry_crops()
     form1.crop_name.choices = [(crop["id"],crop["cropName"]) for crop in crops]
