@@ -177,30 +177,48 @@ def register():
         return render_template("register.html")
 
 
+# QUERY to display
+# Query users
+def qry_user():
+    return db.execute("SELECT * FROM users WHERE id = :user_id",user_id = session["user_id"])
+# Query Crops
+def qry_crops():
+    return db.execute("SELECT * FROM crops WHERE user_id = :user_id", user_id=session["user_id"])
+# Query Crop Expenses
+def qry_cropEx():
+    return db.execute("SELECT * FROM cropExpenses WHERE user_id = :user_id", user_id=session["user_id"])
+# Query livestocks
+def qry_livestocks():
+    return db.execute("SELECT * FROM livestocks WHERE user_id = :user_id", user_id=session["user_id"])
+# Query livestock expenses
+def qry_livestockEx():
+    return db.execute("SELECT * FROM livestockExpenses WHERE user_id = :user_id", user_id=session["user_id"])
+
+
 # SETTING PAGE:
 # Forms for setting route
 class trackingYearsForm(FlaskForm):
-    trackingYears = IntegerField('Tracking Years', validators=[NumberRange(min=1, max=10, message="between 1 and 10 years")])
+    trackingYears = IntegerField('Tracking Years', validators=[NumberRange(min=1, max=10, message="between 1 and 10 years"), InputRequired()])
     submit1 = SubmitField('Save')
 
 class cropForm(FlaskForm):
-    crop_name = StringField('Crop Name')
-    cropUnit = StringField('Crop Measurement')
+    crop_name = StringField('Crop Name', validators=[InputRequired()])
+    cropUnit = StringField('Crop Measurement', validators=[InputRequired()])
     submit2 = SubmitField('Add')
 
 class cropExForm(FlaskForm):
-    cropEx = StringField('Crop Expense')
-    cropExUnit = StringField('Crop Expense measurement')
+    cropEx = StringField('Crop Expense', validators=[InputRequired()])
+    cropExUnit = StringField('Crop Expense measurement', validators=[InputRequired()])
     submit3 = SubmitField('Add')
 
 class livestockForm(FlaskForm):
-    livestock = StringField('LiveStock')
-    livestockUnit = StringField('LiveStock measurement')
+    livestock = StringField('LiveStock', validators=[InputRequired()])
+    livestockUnit = StringField('LiveStock measurement', validators=[InputRequired()])
     submit4 = SubmitField('Add')
 
 class livestockExForm(FlaskForm):
-    livestockEx = StringField('LiveStock Expense')
-    livestockExUnit = StringField('LiveStock Expense measurement')
+    livestockEx = StringField('LiveStock Expense', validators=[InputRequired()])
+    livestockExUnit = StringField('LiveStock Expense measurement', validators=[InputRequired()])
     submit5 = SubmitField('Add')
 
 @app.route("/setting", methods=["GET", "POST"])
@@ -321,10 +339,64 @@ def changePassword():
 @login_required
 def yourFarm():
     # Query user in [users] table
-    user_query = db.execute("SELECT * FROM users WHERE id = :user_id",user_id = session["user_id"])
+    user_query = qry_user()
+
+    #Query crops,livestocks,cropExpenses, livestockExpenses
+    crops=qry_crops()
+    livestocks=qry_livestocks()
+    cropExs=qry_cropEx()
+    livestockExs=qry_livestockEx()
+
+    def amountCrop(crop_id, year):
+        return db.execute("SELECT SUM(crop_amount) as Crop_Amount_Sum FROM dailyHarvestCrop WHERE user_id = :user_id AND crop_id=:crop_id AND dates BETWEEN :startDate AND :endDate", user_id=session["user_id"],
+                                                crop_id=crop_id,
+                                                startDate=datetime.strptime(str(year)+'/1/1', '%Y/%m/%d'),
+                                                endDate=datetime.strptime(str(year)+'/12/31', '%Y/%m/%d'))
+
+    def amountLivestock(livestock_id, year):
+        return db.execute("SELECT SUM(livestock_amount) as Livestock_Amount_Sum FROM dailyHarvestLivestock WHERE user_id = :user_id AND livestock_id=:livestock_id AND dates BETWEEN :startDate AND :endDate", user_id=session["user_id"],
+                                                livestock_id=livestock_id,
+                                                startDate=datetime.strptime(str(year)+'/1/1', '%Y/%m/%d'),
+                                                endDate=datetime.strptime(str(year)+'/12/31', '%Y/%m/%d'))
+
+    def amountCropEx(cropEx_id, year):
+        return db.execute("SELECT SUM(cropEx_amount) as CropEx_Amount_Sum FROM dailySpendCrop WHERE user_id = :user_id AND cropEx_id=:cropEx_id AND dates BETWEEN :startDate AND :endDate", user_id=session["user_id"],
+                                                cropEx_id=cropEx_id,
+                                                startDate=datetime.strptime(str(year)+'/1/1', '%Y/%m/%d'),
+                                                endDate=datetime.strptime(str(year)+'/12/31', '%Y/%m/%d'))
+
+    def amountLivestockEx(livestockEx_id, year):
+        return db.execute("SELECT SUM(LivestockEx_amount) as LivestockEx_Amount_Sum FROM dailySpendLivestock WHERE user_id = :user_id AND livestockEx_id=:livestockEx_id AND dates BETWEEN :startDate AND :endDate", user_id=session["user_id"],
+                                                livestockEx_id=livestockEx_id,
+                                                startDate=datetime.strptime(str(year)+'/1/1', '%Y/%m/%d'),
+                                                endDate=datetime.strptime(str(year)+'/12/31', '%Y/%m/%d'))
 
 
-    return render_template("yourFarm.html", trackingYears=int(user_query[0]["trackingYears"]))
+
+    # Get the current year
+    currentYear = datetime.now().year
+
+    # Display Years:
+    displayYears = [currentYear-year for year in range(user_query[0]["trackingYears"])]
+    print('display years are: ', displayYears)
+
+    # Get the ids according to the display Years
+    #trackingYearsCropID=[]
+    #for year in displayYears:
+        #for i in range(len(trackingYearsCrop)):
+            #if trackingYearsCrop[i]["year"] == displayYears[i]  #
+                #trackingYearsCropID.append(i)
+
+    return render_template("yourFarm.html", user_query=user_query,
+                                            displayYears=displayYears,
+                                            crops=crops,
+                                            livestocks=livestocks,
+                                            cropExs=cropExs,
+                                            livestockExs=livestockExs,
+                                            amountCrop=amountCrop,
+                                            amountLivestock=amountLivestock,
+                                            amountCropEx=amountCropEx,
+                                            amountLivestockEx=amountLivestockEx)
 
 
 @app.route("/calculators")
@@ -332,20 +404,6 @@ def yourFarm():
 def calculators():
     return render_template("calculators.html")
 
-
-# QUERY to display
-# Query Crops
-def qry_crops():
-    return db.execute("SELECT * FROM crops WHERE user_id = :user_id", user_id=session["user_id"])
-# Query Crop Expenses
-def qry_cropEx():
-    return db.execute("SELECT * FROM cropExpenses WHERE user_id = :user_id", user_id=session["user_id"])
-# Query livestocks
-def qry_livestocks():
-    return db.execute("SELECT * FROM livestocks WHERE user_id = :user_id", user_id=session["user_id"])
-# Query livestock expenses
-def qry_livestockEx():
-    return db.execute("SELECT * FROM livestockExpenses WHERE user_id = :user_id", user_id=session["user_id"])
 
 
 # Forms for dailyNotes
@@ -387,19 +445,19 @@ def dailyNotes():
     form4 = spendLivestock(prefix="form4")
 
     # Fill in choices for Harvest CROP form
-    crops = [(crop["id"],crop["cropName"]) for crop in qry_crops()]
+    crops = [(crop["id"],crop["cropName"]+ ' - ' +crop["unitName"]) for crop in qry_crops()]
     form1.crop_name.choices = crops
 
     # Fill in choices for Harvest LIVESTOCK form
-    livestocks = [(livestock["id"],livestock["livestockName"]) for livestock in qry_livestocks()]
+    livestocks = [(livestock["id"],livestock["livestockName"]+ ' - ' +livestock["livestockUnit"]) for livestock in qry_livestocks()]
     form2.livestock_name.choices = livestocks
 
     # Fill in choices for Spending CROP EXPENSES form
-    cropExs = [(cropEx["id"],cropEx["cropExName"]) for cropEx in qry_cropEx()]
+    cropExs = [(cropEx["id"],cropEx["cropExName"]+ ' - ' +cropEx["cropExUnit"]) for cropEx in qry_cropEx()]
     form3.cropEx_name.choices = cropExs
 
     # Fill in choices for Spending LIVESTOCK EXPENSESform
-    livestockExs = [(livestockEx["id"],livestockEx["livestockExName"]) for livestockEx in qry_livestockEx()]
+    livestockExs = [(livestockEx["id"],livestockEx["livestockExName"]+ ' - ' +livestockEx["livestockExUnit"]) for livestockEx in qry_livestockEx()]
     form4.livestockEx_name.choices = livestockExs
 
 
@@ -421,9 +479,7 @@ def dailyNotes():
                                                 crop_id=int(request.form.get("form1-crop_name")),
                                                 crop_amount=float(request.form.get("form1-crop_amount")),
                                                 crop_money=float(request.form.get("form1-crop_money")))
-            # UPDATE Harvest amount into the co-responding year
-            yearHarvest = datetime.strptime(request.form.get("form1-dateNote1"), '%Y-%m-%d').year
-            print('Year harvest crop: ',int(yearHarvest))
+
             return redirect("/dailyNotes")
 
         if form2.submit2.data and form2.validate():
@@ -434,11 +490,6 @@ def dailyNotes():
                     livestock_id=int(request.form.get("form2-livestock_name")),
                     livestock_amount=float(request.form.get("form2-livestock_amount")),
                     livestock_money=float(request.form.get("form2-livestock_amount")))
-
-            # UPDATE Harvest amount into the co-responding year
-            yearHarvest = datetime.strptime(request.form.get("form2-dateNote2"), '%Y-%m-%d').year
-            print('Year harvest livestock: ',int(yearHarvest))
-
             return redirect("/dailyNotes")
 
         if form3.submit3.data and form3.validate():
@@ -449,11 +500,6 @@ def dailyNotes():
                     cropEx_id=int(request.form.get("form3-cropEx_name")),
                     cropEx_amount=float(request.form.get("form3-cropEx_amount")),
                     cropEx_money=float(request.form.get("form3-cropEx_money")))
-
-            # UPDATE Harvest amount into the co-responding year
-            yearHarvest = datetime.strptime(request.form.get("form3-dateNote3"), '%Y-%m-%d').year
-            print('Year spend crop: ',int(yearHarvest))
-
             return redirect("/dailyNotes")
 
         if form4.submit4.data and form4.validate():
@@ -464,11 +510,6 @@ def dailyNotes():
                     livestockEx_id=int(request.form.get("form4-livestockEx_name")),
                     livestockEx_amount=float(request.form.get("form4-livestockEx_amount")),
                     livestockEx_money=float(request.form.get("form4-livestockEx_money")))
-
-            # UPDATE Harvest amount into the co-responding year
-            yearHarvest = datetime.strptime(request.form.get("form4-dateNote4"), '%Y-%m-%d').year
-            print('Year Spend LiveStock: ',int(yearHarvest))
-
             return redirect("/dailyNotes")
 
 

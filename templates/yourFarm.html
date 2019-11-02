@@ -15,25 +15,21 @@
         <thead class="thead-dark">
           <tr>
             <th>Tracking years: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{2019 - year}}</th>
+            {% for year in displayYears %}
+              <th scope="col">{{year}}</th>
             {% endfor %}
           </tr>
         </thead>
 
         <tbody>
+          {% for crop in crops %}
           <tr>
-            <th>Yield: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{year}}</th>
+            <th>{{crop["cropName"]}}-{{crop["unitName"]}}</th> <!--Display name, unit at first cell of a row-->
+            {% for year in displayYears %}
+              <td scope="col"> {{amountCrop(crop["id"],year)[0]["Crop_Amount_Sum"]}} </td>
             {% endfor %}
           </tr>
-          <tr>
-            <th>Revenue: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{year}}</th>
-            {% endfor %}
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
@@ -47,25 +43,21 @@
         <thead class="thead-dark">
           <tr>
             <th>Tracking years: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{2019 - year}}</th>
+            {% for year in displayYears %}
+              <th scope="col">{{year}}</th>
             {% endfor %}
           </tr>
         </thead>
 
         <tbody>
+          {% for livestock in livestocks %}
           <tr>
-            <th>Yield: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{year}}</th>
+            <th>{{livestock["livestockName"]}}-{{livestock["livestockUnit"]}}</th> <!--Display name, unit at first cell of a row-->
+            {% for year in displayYears %}
+              <td scope="col"> {{amountLivestock(livestock["id"],year)[0]["Livestock_Amount_Sum"]}} </td>
             {% endfor %}
           </tr>
-          <tr>
-            <th>Revenue: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{year}}</th>
-            {% endfor %}
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
@@ -81,25 +73,21 @@
         <thead class="thead-dark">
           <tr>
             <th>Tracking years: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{2019 - year}}</th>
+            {% for year in displayYears %}
+              <th scope="col">{{year}}</th>
             {% endfor %}
           </tr>
         </thead>
 
         <tbody>
+          {% for cropEx in cropExs %}
           <tr>
-            <th>Amount: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{year}}</th>
+            <th>{{cropEx["cropExName"]}}-{{cropEx["cropExUnit"]}}</th> <!--Display name, unit at first cell of a row-->
+            {% for year in displayYears %}
+              <td scope="col"> {{amountCropEx(cropEx["id"],year)[0]["CropEx_Amount_Sum"]}} </td>
             {% endfor %}
           </tr>
-          <tr>
-            <th>Expenses: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{year}}</th>
-            {% endfor %}
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
@@ -113,25 +101,21 @@
         <thead class="thead-dark">
           <tr>
             <th>Tracking years: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{2019 - year}}</th>
+            {% for year in displayYears %}
+              <th scope="col">{{year}}</th>
             {% endfor %}
           </tr>
         </thead>
 
         <tbody>
+          {% for livestockEx in livestockExs %}
           <tr>
-            <th>Amount: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{year}}</th>
+            <th>{{livestockEx["livestockExName"]}}-{{livestockEx["livestockExUnit"]}}</th> <!--Display name, unit at first cell of a row-->
+            {% for year in displayYears %}
+              <td scope="col"> {{amountLivestockEx(livestockEx["id"],year)[0]["LivestockEx_Amount_Sum"]}} </td>
             {% endfor %}
           </tr>
-          <tr>
-            <th>Expenses: </th>
-            {% for year in range(trackingYears) %}
-              <th scope="col">{{year}}</th>
-            {% endfor %}
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
