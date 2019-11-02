@@ -10,8 +10,8 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from fractions import Fraction
 from flask_wtf import RecaptchaField, FlaskForm
-from wtforms import StringField, DateField, PasswordField, IntegerField, SubmitField, SelectField, FloatField
-from wtforms.validators import InputRequired, Length, NumberRange, DataRequired
+from wtforms import StringField, DateField, PasswordField, IntegerField, SubmitField, SelectField, FloatField, TextAreaField
+from wtforms.validators import InputRequired, Length, NumberRange, DataRequired, Optional
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 from wtforms.fields.html5 import DateField
@@ -371,21 +371,11 @@ def yourFarm():
                                                 startDate=datetime.strptime(str(year)+'/1/1', '%Y/%m/%d'),
                                                 endDate=datetime.strptime(str(year)+'/12/31', '%Y/%m/%d'))
 
-
-
     # Get the current year
     currentYear = datetime.now().year
-
     # Display Years:
     displayYears = [currentYear-year for year in range(user_query[0]["trackingYears"])]
     print('display years are: ', displayYears)
-
-    # Get the ids according to the display Years
-    #trackingYearsCropID=[]
-    #for year in displayYears:
-        #for i in range(len(trackingYearsCrop)):
-            #if trackingYearsCrop[i]["year"] == displayYears[i]  #
-                #trackingYearsCropID.append(i)
 
     return render_template("yourFarm.html", user_query=user_query,
                                             displayYears=displayYears,
@@ -412,6 +402,7 @@ class harvestCrop(FlaskForm):
     crop_name = SelectField(u'Choose Crop', coerce=int, validators=[InputRequired()])
     crop_amount = FloatField('Harvesting Amount',widget=html5.NumberInput(), validators=[InputRequired()])
     crop_money = FloatField('Monetary equivalent',widget=html5.NumberInput(), validators=[InputRequired()])
+    note = TextAreaField(u'Note', validators =[Optional(), Length(max=200)])
     submit1 = SubmitField('Harvested')
 
 class harvestLivestock(FlaskForm):
@@ -419,6 +410,7 @@ class harvestLivestock(FlaskForm):
     livestock_name = SelectField(u'Choose Livestock', coerce=int, validators=[InputRequired()])
     livestock_amount = IntegerField('Harvesting Amount',widget=html5.NumberInput(), validators=[InputRequired()])
     livestock_money = IntegerField('Monetary equivalent',widget=html5.NumberInput(), validators=[InputRequired()])
+    note = TextAreaField(u'Note', validators =[Optional(), Length(max=200)])
     submit2 = SubmitField('Harvested')
 
 class spendCrop(FlaskForm):
@@ -426,6 +418,7 @@ class spendCrop(FlaskForm):
     cropEx_name = SelectField(u'Choose Crop Expense', coerce=int, validators=[InputRequired()])
     cropEx_amount = IntegerField('Spending Amount',widget=html5.NumberInput(), validators=[InputRequired()])
     cropEx_money = IntegerField('Monetary equivalent',widget=html5.NumberInput(), validators=[InputRequired()])
+    note = TextAreaField(u'Note', validators =[Optional(), Length(max=200)])
     submit3 = SubmitField('Spent')
 
 class spendLivestock(FlaskForm):
@@ -433,6 +426,7 @@ class spendLivestock(FlaskForm):
     livestockEx_name = SelectField(u'Choose Livestock Expense', coerce=int, validators=[InputRequired()])
     livestockEx_amount = IntegerField('Spending Amount',widget=html5.NumberInput(), validators=[InputRequired()])
     livestockEx_money = IntegerField('Monetary equivalent',widget=html5.NumberInput(), validators=[InputRequired()])
+    note = TextAreaField(u'Note', validators =[Optional(), Length(max=200)])
     submit4 = SubmitField('Spent')
 
 @app.route("/dailyNotes", methods=["GET", "POST"])
@@ -474,42 +468,46 @@ def dailyNotes():
     else:
         if form1.submit1.data and form1.validate():
             # INSERT New Harvest CROP into dailyHarvestCrop table:
-            db.execute("INSERT INTO dailyHarvestCrop (user_id, dates, crop_id, crop_amount, crop_money) VALUES (:user_id, :dates, :crop_id, :crop_amount, :crop_money)", user_id=session["user_id"],
+            db.execute("INSERT INTO dailyHarvestCrop (user_id, dates, crop_id, crop_amount, crop_money, note) VALUES (:user_id, :dates, :crop_id, :crop_amount, :crop_money, :note)", user_id=session["user_id"],
                                                 dates=request.form.get("form1-dateNote1"),
                                                 crop_id=int(request.form.get("form1-crop_name")),
                                                 crop_amount=float(request.form.get("form1-crop_amount")),
-                                                crop_money=float(request.form.get("form1-crop_money")))
+                                                crop_money=float(request.form.get("form1-crop_money")),
+                                                note=request.form.get("form1-note"))
 
             return redirect("/dailyNotes")
 
         if form2.submit2.data and form2.validate():
             # INSERT New Harvest LIVESTOCK into dailyHarvestLivestock table:
-            db.execute("INSERT INTO dailyHarvestLivestock (user_id, dates, livestock_id, livestock_amount, livestock_money) VALUES (:user_id, :dates, :livestock_id, :livestock_amount, :livestock_money)",
+            db.execute("INSERT INTO dailyHarvestLivestock (user_id, dates, livestock_id, livestock_amount, livestock_money, note) VALUES (:user_id, :dates, :livestock_id, :livestock_amount, :livestock_money, :note)",
                     user_id=session["user_id"],
                     dates=request.form.get("form2-dateNote2"),
                     livestock_id=int(request.form.get("form2-livestock_name")),
                     livestock_amount=float(request.form.get("form2-livestock_amount")),
-                    livestock_money=float(request.form.get("form2-livestock_amount")))
+                    livestock_money=float(request.form.get("form2-livestock_amount")),
+                    note=request.form.get("form2-note"))
             return redirect("/dailyNotes")
 
         if form3.submit3.data and form3.validate():
             # INSERT New Expenditure Crop into dailySpendCrop table:
-            db.execute("INSERT INTO dailySpendCrop (user_id, dates, cropEx_id, cropEx_amount, cropEx_money) VALUES (:user_id, :dates, :cropEx_id, :cropEx_amount, :cropEx_money)",
+            db.execute("INSERT INTO dailySpendCrop (user_id, dates, cropEx_id, cropEx_amount, cropEx_money, note) VALUES (:user_id, :dates, :cropEx_id, :cropEx_amount, :cropEx_money, :note)",
                     user_id=session["user_id"],
                     dates=request.form.get("form3-dateNote3"),
                     cropEx_id=int(request.form.get("form3-cropEx_name")),
                     cropEx_amount=float(request.form.get("form3-cropEx_amount")),
-                    cropEx_money=float(request.form.get("form3-cropEx_money")))
+                    cropEx_money=float(request.form.get("form3-cropEx_money")),
+                    note=request.form.get("form3-note"))
             return redirect("/dailyNotes")
 
         if form4.submit4.data and form4.validate():
             # INSERT new LIVESTOCK EXPENSES into dailySpendCrop table:
-            db.execute("INSERT INTO dailySpendLivestock (user_id, dates, livestockEx_id, livestockEx_amount, livestockEx_money) VALUES (:user_id, :dates, :livestockEx_id, :livestockEx_amount, :livestockEx_money)",
+            db.execute("INSERT INTO dailySpendLivestock (user_id, dates, livestockEx_id, livestockEx_amount, livestockEx_money, note) VALUES (:user_id, :dates, :livestockEx_id, :livestockEx_amount, :livestockEx_money, :note)",
                     user_id=session["user_id"],
                     dates=request.form.get("form4-dateNote4"),
                     livestockEx_id=int(request.form.get("form4-livestockEx_name")),
                     livestockEx_amount=float(request.form.get("form4-livestockEx_amount")),
-                    livestockEx_money=float(request.form.get("form4-livestockEx_money")))
+                    livestockEx_money=float(request.form.get("form4-livestockEx_money")),
+                    note=request.form.get("form4-note"))
             return redirect("/dailyNotes")
 
 
