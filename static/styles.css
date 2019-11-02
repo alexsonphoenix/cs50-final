@@ -4,7 +4,9 @@ nav .navbar-brand
     /* size for brand */
     font-size: xx-large;
 }
-
+.p-5 {
+    padding-top: 0px!important;
+}
 /* colors for brand */
 nav .navbar-brand .blue
 {
@@ -23,6 +25,18 @@ nav .navbar-brand .green
     color: #2e944b;
 }
 
+
+.big-banner{
+  background-image: url('images/background_login.jpg');
+  /* Full height */
+  height: 100%;
+
+  padding-top: 400px;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
 /* Colour indicating successfully registered */
 input[name="email"]:required {

@@ -513,7 +513,6 @@ def dailyNotes():
 
 
 
-
 def errorhandler(e):
     """Handle error"""
     if not isinstance(e, HTTPException):

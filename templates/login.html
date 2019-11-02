@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block main %}
+<div class="big-banner">
 
   <form action="{{ url_for('login') }}" method="POST">
     {{ form.csrf_token }}
@@ -41,11 +42,13 @@
   </form>
 
   <div class="text-center">
-    <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm">Already have an account</a>
+    <a href="" class="btn btn-default btn-rounded mb-4 text-info" data-toggle="modal" data-target="#modalLoginForm"><b>Already have an account</b></a>
   </div>
 
   <div class="text-center">
-    <a href="/register" class="btn btn-default btn-rounded mb-4"> Register an account </a>
+    <a href="/register" class="btn btn-default btn-rounded mb-4 text-info"><b>Register an account</b></a>
   </div>
 
+
+</div>
 {% endblock %}
