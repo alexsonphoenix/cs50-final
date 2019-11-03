@@ -9,14 +9,13 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 from fractions import Fraction
-from flask_wtf import RecaptchaField, FlaskForm
+from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, PasswordField, IntegerField, SubmitField, SelectField, FloatField, TextAreaField
 from wtforms.validators import InputRequired, Length, NumberRange, DataRequired, Optional
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 from wtforms.fields.html5 import DateField
 from wtforms.widgets import html5
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 from helpers import apology, login_required
 
@@ -35,11 +34,6 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or \
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-
-# Recaptcha by Google to ensure robots don't mess with the database
-app.config["RECAPTCHA_PUBLIC_KEY"] = '6LfJAL8UAAAAAH8h3LZbmm7F7w5Mi-VkhKZPc328'
-app.config["RECAPTCHA_PRIVATE_KEY"] = '6LfJAL8UAAAAAN7_Kwsc0uRGm0GrI9HOso2Ud-Ef'
-app.config["TESTING"] = True
 
 # Ensure responses aren't cached
 @app.after_request
@@ -515,23 +509,17 @@ def dailyNotes():
 @app.route("/history")
 @login_required
 def history():
-    #Query crops,livestocks,cropExpenses, livestockExpenses
-    crops=qry_crops()
-    livestocks=qry_livestocks()
-    cropExs=qry_cropEx()
-    livestockExs=qry_livestockEx()
 
     #Query Daily Harvest and Expenses
-    qry_dailyHarvestCrop = db.execute("SELECT * FROM dailyHarvestCrop WHERE user_id = :user_id",    user_id=session["user_id"])
-    qry_dailyHarvestLivestock = db.execute("SELECT * FROM dailyHarvestLivestock WHERE user_id = :user_id",   user_id=session["user_id"])
-    qry_dailySpendCrop = db.execute("SELECT * FROM dailySpendCrop WHERE user_id = :user_id",    user_id=session["user_id"])
-    qry_dailySpendLivestock = db.execute("SELECT * FROM dailySpendLivestock WHERE user_id = :user_id",    user_id=session["user_id"])
+    qry_dailyHarvestCrop = db.execute("SELECT crops.cropName,crops.unitName, dailyHarvestCrop.dates, dailyHarvestCrop.crop_amount,dailyHarvestCrop.crop_money,dailyHarvestCrop.note FROM dailyHarvestCrop INNER JOIN crops ON crops.id=dailyHarvestCrop.crop_id WHERE dailyHarvestCrop.user_id = :user_id",    user_id=session["user_id"])
 
-    return render_template("history.html",crops=crops,
-                                        livestocks=livestocks,
-                                        cropExs=cropExs,
-                                        livestockExs=livestockExs,
-                                        qry_dailyHarvestCrop=qry_dailyHarvestCrop,
+    qry_dailyHarvestLivestock = db.execute("SELECT livestocks.livestockName,livestocks.livestockUnit, dailyHarvestLivestock.dates,dailyHarvestLivestock.livestock_amount,dailyHarvestLivestock.livestock_money,dailyHarvestLivestock.note FROM dailyHarvestLivestock INNER JOIN livestocks ON livestocks.id=dailyHarvestLivestock.livestock_id WHERE dailyHarvestLivestock.user_id = :user_id",    user_id=session["user_id"])
+
+    qry_dailySpendCrop = db.execute("SELECT cropExpenses.cropExName,cropExpenses.cropExUnit, dailySpendCrop.dates, dailySpendCrop.cropEx_amount,dailySpendCrop.cropEx_money,dailySpendCrop.note FROM dailySpendCrop INNER JOIN cropExpenses ON cropExpenses.id=dailySpendCrop.cropEx_id WHERE dailySpendCrop.user_id = :user_id",    user_id=session["user_id"])
+
+    qry_dailySpendLivestock = db.execute("SELECT livestockExpenses.livestockExName,livestockExpenses.livestockExUnit,dailySpendLivestock.dates,dailySpendLivestock.livestockEx_amount,dailySpendLivestock.livestockEx_money,dailySpendLivestock.note FROM dailySpendLivestock INNER JOIN livestockExpenses ON livestockExpenses.id=dailySpendLivestock.livestockEx_id WHERE dailySpendLivestock.user_id = :user_id",    user_id=session["user_id"])
+
+    return render_template("history.html",qry_dailyHarvestCrop=qry_dailyHarvestCrop,
                                         qry_dailyHarvestLivestock=qry_dailyHarvestLivestock,
                                         qry_dailySpendCrop=qry_dailySpendCrop,
                                         qry_dailySpendLivestock=qry_dailySpendLivestock)

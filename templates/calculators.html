@@ -123,10 +123,10 @@
     years = document.getElementById("period").value;
 
     if (document.getElementById('weekly').checked) {
-      return 'VND '+ weeklyFV(loan_amount,annualRate,years).toLocaleString(undefined, {maximumFractionDigits:2});
+      return '$ '+ weeklyFV(loan_amount,annualRate,years).toLocaleString(undefined, {maximumFractionDigits:2});
 
     }else if (document.getElementById('monthly').checked){
-      return 'VND '+ monthlyFV(loan_amount,annualRate,years).toLocaleString(undefined, {maximumFractionDigits:2});
+      return '$ '+ monthlyFV(loan_amount,annualRate,years).toLocaleString(undefined, {maximumFractionDigits:2});
     }
   }
 

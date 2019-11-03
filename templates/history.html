@@ -6,8 +6,7 @@
 
 {% block main %}
 
-<span class=" row justify-content-center text-success"><h2>Harvest</h2></span>
-
+<span class=" row justify-content-center text-success"><h2>Harvested Crops</h2></span>
 <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
 
   <table class="table table-bordered table-striped mb-0">
@@ -25,8 +24,8 @@
       {% for qry_dHC in qry_dailyHarvestCrop %}
       <tr>
         <td>{{qry_dHC["dates"]}}</td>
-        <td>{{qry_dHC["crop_id"]}}</td>
-        <td>{{qry_dHC["crop_amount"]}}</td>
+        <td>{{qry_dHC["cropName"]}}</td><!---->
+        <td>{{qry_dHC["crop_amount"]}} ({{qry_dHC["unitName"]}})</td>
         <td>{{qry_dHC["crop_money"]}}</td>
         <td>{{qry_dHC["note"]}}</td>
       </tr>
@@ -37,4 +36,90 @@
 
 </div>
 
+<hr>
+
+<span class=" row justify-content-center text-success"><h2>Harvested Livestocks</h2></span>
+<div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+  <table class="table table-bordered table-striped mb-0">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Name</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Monetary Equivalent</th>
+        <th scope="col">Note</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for qry_dHL in qry_dailyHarvestLivestock %}
+      <tr>
+        <td>{{qry_dHL["dates"]}}</td>
+        <td>{{qry_dHL["livestockName"]}}</td> <!--  -->
+        <td>{{qry_dHL["livestock_amount"]}} ({{qry_dHL["livestockUnit"]}})</td>
+        <td>{{qry_dHL["livestock_money"]}}</td>
+        <td>{{qry_dHL["note"]}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<hr>
+
+<span class=" row justify-content-center text-success"><h2>Spent On Crops</h2></span>
+<div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+  <table class="table table-bordered table-striped mb-0">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Name</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Monetary Equivalent</th>
+        <th scope="col">Note</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for qry_dSC in qry_dailySpendCrop %}
+      <tr>
+        <td>{{qry_dSC["dates"]}}</td>
+        <td>{{qry_dSC["cropExName"]}}</td><!--["cropExName"]-->
+        <td>{{qry_dSC["cropEx_amount"]}} ({{qry_dSC["cropExUnit"]}})</td>
+        <td>{{qry_dSC["cropEx_money"]}}</td>
+        <td>{{qry_dSC["note"]}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<hr>
+
+<span class=" row justify-content-center text-success"><h2>Spent On Livestocks</h2></span>
+<div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+  <table class="table table-bordered table-striped mb-0">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Name</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Monetary Equivalent</th>
+        <th scope="col">Note</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for qry_dSL in qry_dailySpendLivestock %}
+      <tr>
+        <td>{{qry_dSL["dates"]}}</td>
+        <td>{{qry_dSL["livestockExName"]}}</td><!---->
+        <td>{{qry_dSL["livestockEx_amount"]}} ({{qry_dSL["livestockExUnit"]}})</td>
+        <td>{{qry_dSL["livestockEx_money"]}}</td>
+        <td>{{qry_dSL["note"]}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
