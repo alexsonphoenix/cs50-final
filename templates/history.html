@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+
+<span class=" row justify-content-center text-success"><h2>Harvest</h2></span>
+
+<div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+
+  <table class="table table-bordered table-striped mb-0">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Name</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Monetary Equivalent</th>
+        <th scope="col">Note</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for qry_dHC in qry_dailyHarvestCrop %}
+      <tr>
+        <td>{{qry_dHC["dates"]}}</td>
+        <td>{{qry_dHC["crop_id"]}}</td>
+        <td>{{qry_dHC["crop_amount"]}}</td>
+        <td>{{qry_dHC["crop_money"]}}</td>
+        <td>{{qry_dHC["note"]}}</td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+
+</div>
+
+{% endblock %}

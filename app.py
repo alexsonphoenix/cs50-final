@@ -512,6 +512,31 @@ def dailyNotes():
 
 
 
+@app.route("/history")
+@login_required
+def history():
+    #Query crops,livestocks,cropExpenses, livestockExpenses
+    crops=qry_crops()
+    livestocks=qry_livestocks()
+    cropExs=qry_cropEx()
+    livestockExs=qry_livestockEx()
+
+    #Query Daily Harvest and Expenses
+    qry_dailyHarvestCrop = db.execute("SELECT * FROM dailyHarvestCrop WHERE user_id = :user_id",    user_id=session["user_id"])
+    qry_dailyHarvestLivestock = db.execute("SELECT * FROM dailyHarvestLivestock WHERE user_id = :user_id",   user_id=session["user_id"])
+    qry_dailySpendCrop = db.execute("SELECT * FROM dailySpendCrop WHERE user_id = :user_id",    user_id=session["user_id"])
+    qry_dailySpendLivestock = db.execute("SELECT * FROM dailySpendLivestock WHERE user_id = :user_id",    user_id=session["user_id"])
+
+    return render_template("history.html",crops=crops,
+                                        livestocks=livestocks,
+                                        cropExs=cropExs,
+                                        livestockExs=livestockExs,
+                                        qry_dailyHarvestCrop=qry_dailyHarvestCrop,
+                                        qry_dailyHarvestLivestock=qry_dailyHarvestLivestock,
+                                        qry_dailySpendCrop=qry_dailySpendCrop,
+                                        qry_dailySpendLivestock=qry_dailySpendLivestock)
+
+
 
 def errorhandler(e):
     """Handle error"""
