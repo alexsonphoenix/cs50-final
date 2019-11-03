@@ -5,45 +5,46 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/register" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <div class="row d-flex justify-content-center">
-            <div class="form-group">
-                <label for="emailField">Email</label>
-                <input autocomplete="off" autofocus class="form-control" id = "emailField" name="email" placeholder="youremail@example.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-            </div>
-        </div>
+<div class="bg-register">
+  <form action="/register" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <div class="row d-flex justify-content-center">
+          <div class="form-group">
+              <label for="emailField" class="text-dark"><b>Email</b></label>
+              <input autocomplete="off" autofocus class="form-control" id = "emailField" name="email" placeholder="youremail@example.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+          </div>
+      </div>
 
-        <div class="row justify-content-center">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input autocomplete="off" autofocus class="form-control" id = "username" name="username" placeholder="Username" type="text" required data-container="body" data-toggle="popover" data-placement="left" data-content="Too short or alredy exists">
+      <div class="row justify-content-center">
+          <div class="form-group">
+              <label for="username" class="text-dark"><b>Username</b></label>
+              <input autocomplete="off" autofocus class="form-control" id = "username" name="username" placeholder="Username" type="text" required data-container="body" data-toggle="popover" data-placement="left" data-content="Too short or alredy exists">
 
-            </div>
-        </div>
+          </div>
+      </div>
 
-        <div class="row d-flex justify-content-center">
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input class="form-control" id = "password" name="password" placeholder="Password" type="password" required>
-                <small id="passwordHelpInline" class="text-muted">
-                  Must be 8-20 characters long.
-                </small>
-            </div>
-        </div>
+      <div class="row d-flex justify-content-center">
+          <div class="form-group">
+              <label for="password" class="text-dark"><b>Password</b></label>
+              <input class="form-control" id = "password" name="password" placeholder="Password" type="password" required>
+              <small id="passwordHelpInline" class="text-muted">
+                Must be 8-20 characters long.
+              </small>
+          </div>
+      </div>
 
-        <div class="row d-flex justify-content-center">
-            <div class="form-group">
-                <label for="confirmation">Confirm</label>
-                <input class="form-control" id = "confirmation" name="confirmation" placeholder="Confirmation" type="password" required>
-            </div>
-        </div>
+      <div class="row d-flex justify-content-center">
+          <div class="form-group">
+              <label for="confirmation"  class="text-dark"><b>Confirm</b></label>
+              <input class="form-control" id = "confirmation" name="confirmation" placeholder="Confirmation" type="password" required>
+          </div>
+      </div>
 
-        <div class="text-center">
-          <button class="btn btn-info" type="submit" name="submit">Register</button>
-        </div>
-    </form>
-
+      <div class="text-center">
+        <button class="btn btn-info" type="submit" name="submit">Register</button>
+      </div>
+  </form>
+</div>
 <script>
 var submitability_username = false;
 var submitability_email = false;

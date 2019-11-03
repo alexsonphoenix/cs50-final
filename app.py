@@ -505,11 +505,9 @@ def dailyNotes():
             return redirect("/dailyNotes")
 
 
-
 @app.route("/history")
 @login_required
 def history():
-
     #Query Daily Harvest and Expenses
     qry_dailyHarvestCrop = db.execute("SELECT crops.cropName,crops.unitName, dailyHarvestCrop.dates, dailyHarvestCrop.crop_amount,dailyHarvestCrop.crop_money,dailyHarvestCrop.note FROM dailyHarvestCrop INNER JOIN crops ON crops.id=dailyHarvestCrop.crop_id WHERE dailyHarvestCrop.user_id = :user_id",    user_id=session["user_id"])
 

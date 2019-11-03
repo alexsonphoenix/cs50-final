@@ -5,7 +5,14 @@
 {% endblock %}
 
 {% block main %}
-<div class="big-banner">
+<div class="bg-login">
+  <div class="text-center">
+    <button href="" class="btn btn-info btn-rounded mb-4 " data-toggle="modal" data-target="#modalLoginForm"><b>Already have an account</b></button>
+  </div>
+
+  <div class="text-center">
+    <button href="/register" class="btn btn-info btn-rounded mb-4 "><b>Register an account</b></button>
+  </div>
 
   <form action="{{ url_for('login') }}" method="POST">
     {{ form.csrf_token }}
@@ -40,15 +47,5 @@
       </div>
     </div>
   </form>
-
-  <div class="text-center">
-    <button href="" class="btn btn-info btn-rounded mb-4 " data-toggle="modal" data-target="#modalLoginForm"><b>Already have an account</b></button>
-  </div>
-
-  <div class="text-center">
-    <button href="/register" class="btn btn-info btn-rounded mb-4 "><b>Register an account</b></button>
-  </div>
-
-
 </div>
 {% endblock %}

@@ -8,8 +8,9 @@
     <div class="container">
       <div class="row">
         <div class="col-6 farming_calculator">
-          <h1>Farming Calculators</h1>
-          <h3>1. Water</h3>
+          <h1 class="text-center text-primary">Farming Calculators</h1>
+          <br>
+          <h3 class="text-primary">1. Water</h3>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text">Stump</span>
@@ -38,9 +39,9 @@
         <!-- Half page -->
 
         <div class="col-6 finance_calculator">
-          <h1>Finance Calculators</h1>
-
-          <h3>1. Get a loan?</h3>
+          <h1 class="text-center text-info">Finance Calculators</h1>
+          <br>
+          <h3 class="text-info">1. Get a loan?</h3>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text">$</span>
@@ -78,7 +79,34 @@
       </div>
     </div>
 
-<!-- Calculator Widget Copyright CalculatorSoup, LLC at www.calculatorsoup.com. Use is granted only if this statement and all links to www.calculatorsoup.com are maintained. --><a href="https://www.calculatorsoup.com/calculators/math/basic.php" onclick="window.open('https://www.calculatorsoup.com/calculators/math/basic.php?do=pop','Basic Calculator','width=400,height=600,toolbar=no,menubar=no,scrollbars=yes,resizable=yes');return false;">Basic Calculator</a>
+<hr>
+
+<!-- Embedded calculator -->
+<div class="text-center">
+  <button class="btn btn-info" data-toggle="modal" data-target="#modal-calculator"> Open Calculator </button>
+</div>
+
+<div class="modal fade" id="modal-calculator" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title w-100 font-weight-bold">Calculator</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <iframe src='https://www.embed.com/app/calculator/gray-calculator.html' style='width: 500px; height: 500px;' scrolling='no' frameBorder='0'></iframe>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 
 <script type="text/javascript">

@@ -24,7 +24,7 @@
         <tbody>
           {% for crop in crops %}
           <tr>
-            <th>{{crop["cropName"]}}-{{crop["unitName"]}}</th> <!--Display name, unit at first cell of a row-->
+            <th>{{crop["cropName"]}} ({{crop["unitName"]}})</th> <!--Display name, unit at first cell of a row-->
             {% for year in displayYears %}
               <td scope="col"> {{amountCrop(crop["id"],year)[0]["Crop_Amount_Sum"]}} </td>
             {% endfor %}
@@ -52,7 +52,7 @@
         <tbody>
           {% for livestock in livestocks %}
           <tr>
-            <th>{{livestock["livestockName"]}}-{{livestock["livestockUnit"]}}</th> <!--Display name, unit at first cell of a row-->
+            <th>{{livestock["livestockName"]}} ({{livestock["livestockUnit"]}})</th> <!--Display name, unit at first cell of a row-->
             {% for year in displayYears %}
               <td scope="col"> {{amountLivestock(livestock["id"],year)[0]["Livestock_Amount_Sum"]}} </td>
             {% endfor %}
@@ -82,7 +82,7 @@
         <tbody>
           {% for cropEx in cropExs %}
           <tr>
-            <th>{{cropEx["cropExName"]}}-{{cropEx["cropExUnit"]}}</th> <!--Display name, unit at first cell of a row-->
+            <th>{{cropEx["cropExName"]}} ({{cropEx["cropExUnit"]}})</th> <!--Display name, unit at first cell of a row-->
             {% for year in displayYears %}
               <td scope="col"> {{amountCropEx(cropEx["id"],year)[0]["CropEx_Amount_Sum"]}} </td>
             {% endfor %}
@@ -110,7 +110,7 @@
         <tbody>
           {% for livestockEx in livestockExs %}
           <tr>
-            <th>{{livestockEx["livestockExName"]}}-{{livestockEx["livestockExUnit"]}}</th> <!--Display name, unit at first cell of a row-->
+            <th>{{livestockEx["livestockExName"]}} ({{livestockEx["livestockExUnit"]}})</th> <!--Display name, unit at first cell of a row-->
             {% for year in displayYears %}
               <td scope="col"> {{amountLivestockEx(livestockEx["id"],year)[0]["LivestockEx_Amount_Sum"]}} </td>
             {% endfor %}

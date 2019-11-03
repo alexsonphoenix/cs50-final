@@ -25,17 +25,50 @@ nav .navbar-brand .green
     color: #2e944b;
 }
 
+body, html {
+  height: 100%;
+}
 
-.big-banner{
+.bg-login{
   background-image: url('images/background_login.jpg');
   /* Full height */
   height: 100%;
 
-  padding-top: 400px;
+  padding-top: 200px;
+  padding-bottom: 300px;
   /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.bg-register{
+  background-image: url('images/background_farmer.jpg');
+  /* Full height */
+  height: 100%;
+
+  padding-top: 50px;
+  padding-bottom: 150px;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.every-background{
+  /* The image used */
+  background-image: url("images/wood_background.jpg");
+
+  /* Full height */
+  height: 100%;
+
+  padding-top: 20px;
+  padding-bottom: 100px;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
 }
 
 /* Colour indicating successfully registered */
