@@ -5,105 +5,108 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container">
-      <div class="row">
-        <div class="col-6 farming_calculator">
-          <h1 class="text-center text-primary">Farming Calculators</h1>
-          <br>
-          <h3 class="text-primary">1. Water</h3>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Stump</span>
-            </div>
-            <input type="number" class="form-control" name="stump" id="stump" aria-label=" Number of stump of trees" placeholder="Number of Stump">
-            <div class="input-group-append">
-              <span class="input-group-text"></span>
-            </div>
+<div class="every-background">
+  <div class="container">
+    <div class="row">
+      <div class="col-6 farming_calculator">
+        <h1 class="text-center text-primary">Farming Calculators</h1>
+        <br>
+        <h3 class="text-primary">1. Water</h3>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Stump</span>
           </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">L</span>
-            </div>
-            <input type="number" name="water" class="form-control" id="water" aria-label="Amount of water for each stump" placeholder="Amount of water per stump">
-            <div class="input-group-append">
-              <span class="input-group-text"></span>
-            </div>
+          <input type="number" class="form-control" name="stump" id="stump" aria-label=" Number of stump of trees" placeholder="Number of Stump">
+          <div class="input-group-append">
+            <span class="input-group-text"></span>
           </div>
-
-          <button type="button" class="btn btn-outline-success row justify-content-center" onclick="getElementById('water_result').innerHTML = water_calculate()"> Calculate </button>
-          <span id="water_result" class="row justify-content-center"></span>
-
         </div>
 
-        <!-- Half page -->
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">L</span>
+          </div>
+          <input type="number" name="water" class="form-control" id="water" aria-label="Amount of water for each stump" placeholder="Amount of water per stump">
+          <div class="input-group-append">
+            <span class="input-group-text"></span>
+          </div>
+        </div>
 
-        <div class="col-6 finance_calculator">
-          <h1 class="text-center text-info">Finance Calculators</h1>
-          <br>
-          <h3 class="text-info">1. Get a loan?</h3>
+        <button type="button" class="btn btn-outline-success row justify-content-center" onclick="getElementById('water_result').innerHTML = water_calculate()"> Calculate </button>
+        <span id="water_result" class="row justify-content-center"></span>
+
+      </div>
+
+      <!-- Half page -->
+
+      <div class="col-6 finance_calculator">
+        <h1 class="text-center text-info">Finance Calculators</h1>
+        <br>
+        <h3 class="text-info">1. Get a loan?</h3>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input type="number" class="form-control" id="loan_amount" aria-label="Amount (to the nearest VND)" placeholder="Borrow how much?" onkeyup='addcomma()'>
+          <div class="input-group-append">
+            <span class="input-group-text">.00</span>
+          </div>
+        </div>
+
+        <div class="row">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text">$</span>
+              <span class="input-group-text" id="inputGroup-sizing-default">years</span>
             </div>
-            <input type="number" class="form-control" id="loan_amount" aria-label="Amount (to the nearest VND)" placeholder="Borrow how much?" onkeyup='addcomma()'>
-            <div class="input-group-append">
-              <span class="input-group-text">.00</span>
-            </div>
+            <input type="number" id="period" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Borrow for how long?">
           </div>
 
-          <div class="row">
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default">years</span>
-              </div>
-              <input type="number" id="period" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Borrow for how long?">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">%</span>
             </div>
-
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default">%</span>
-              </div>
-              <input type="number" id="interest" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Anual interest rate? %">
-            </div>
+            <input type="number" id="interest" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Anual interest rate? %">
           </div>
-          <div class="compounding">
-            <input class="form-check-input" name="compounding" type="radio" id="weekly" value="weekly"> Weekly compounded (52/Y)
-            <br>
-            <input class="form-check-input" name="compounding" type="radio" id="monthly" value="monthly" checked="checked"> Monthly compounded (12/Y)
-          </div>
-
-          <button type="button" class="btn btn-outline-success row justify-content-center" onclick="getElementById('loan_result').innerHTML = loan_calculate()" >Calculate</button>
-          <span id="loan_result" class="row justify-content-center"></span>
         </div>
+        <div class="compounding">
+          <input class="form-check-input" name="compounding" type="radio" id="weekly" value="weekly"><p class="text-white">Weekly compounded (52/Y)</p>
+
+          <input class="form-check-input" name="compounding" type="radio" id="monthly" value="monthly" checked="checked"> <p class="text-white">Monthly compounded (12/Y)</p>
+        </div>
+
+        <button type="button" class="btn btn-outline-success row justify-content-center" onclick="getElementById('loan_result').innerHTML = loan_calculate()" >Calculate</button>
+        <span id="loan_result" class="row justify-content-center"></span>
       </div>
     </div>
+  </div>
 
-<hr>
+  <hr>
 
-<!-- Embedded calculator -->
-<div class="text-center">
-  <button class="btn btn-info" data-toggle="modal" data-target="#modal-calculator"> Open Calculator </button>
-</div>
+  <!-- Embedded calculator -->
+  <div class="text-center">
+    <button class="btn btn-info" data-toggle="modal" data-target="#modal-calculator"> Open Calculator </button>
+  </div>
 
-<div class="modal fade" id="modal-calculator" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title w-100 font-weight-bold">Calculator</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-          <iframe src='https://www.embed.com/app/calculator/gray-calculator.html' style='width: 500px; height: 500px;' scrolling='no' frameBorder='0'></iframe>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  <div class="modal fade" id="modal-calculator" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title w-100 font-weight-bold">Calculator</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <iframe src='https://www.embed.com/app/calculator/gray-calculator.html' style='width: 500px; height: 500px;' scrolling='no' frameBorder='0'></iframe>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
 
 
 

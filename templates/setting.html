@@ -6,197 +6,200 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container" style="padding-top: 20px;">
-      <a href="/changePassword"> Change Password </a>
+<div class="every-background">
+  <div class="container">
+    <a href="/changePassword" class="text-white"> Change Password </a>
+  </div>
+
+  <hr>
+  <!-- Tracking Years form -->
+  <form class="" action="{{ url_for('setting') }}" method="POST">
+    <div class="row justify-content-center" >
+      {{ form1.csrf_token }}
+      {{ wtf.form_field(form1.trackingYears, placeholder="Eg: 5") }}
+      <span class="px-md-5 align-self-center">
+        {{ wtf.form_field(form1.submit1, class="btn btn-info justify-content-center") }}
+       </span>
+    </div>
+  </form>
+  <hr>
+  <!-- Link to the 4 forms -->
+  <br>
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <div class="row justify-content-center">
+          <a href="" class="btn btn-default btn-rounded mb-4 text-white" data-toggle="modal" data-target="#modalCropForm"><img src="static\images\crops.png" class="img-fluid" alt="Responsive image"><br>Crops</a>
+        </div>
+
+        <div class="row justify-content-center">
+          <a href="" class="btn btn-default btn-rounded mb-4 text-white" data-toggle="modal" data-target="#modalLivestockForm"><img src="static\images\livestocks.png" class="img-fluid" alt="Responsive image"><br>Livestocks</a>
+        </div>
+      </div>
+
+
+      <div class="col-6">
+        <div class="row justify-content-center">
+          <a href="" class="btn btn-default btn-rounded mb-4 text-white" data-toggle="modal" data-target="#modalCropExForm"><img style="width: 128px; height:128px;" src="static\images\cropExpenses.png" class="img-fluid" alt="Responsive image"><br>Crop Expenses</a>
+        </div>
+
+        <div class="row justify-content-center">
+          <a href="" class="btn btn-default btn-rounded mb-4 text-white" data-toggle="modal" data-target="#modalLivestockExForm"><img style="width: 110px; height:110px;" src="static\images\livestockExpenses.png" class="img-fluid" alt="Responsive image"><br>LiveStock Expenses</a>
+        </div>
+      </div>
     </div>
 
-    <hr>
-    <!-- Tracking Years form -->
-    <form class="" action="{{ url_for('setting') }}" method="POST">
-      <div class="row justify-content-center" >
-        {{ form1.csrf_token }}
-        {{ wtf.form_field(form1.trackingYears, placeholder="Eg: 5") }}
-        <span class="px-md-5 align-self-center">
-          {{ wtf.form_field(form1.submit1, class="btn btn-info justify-content-center") }}
-         </span>
-      </div>
-    </form>
-    <hr>
-    <!-- Link to the 4 forms -->
-    <br>
-    <div class="container">
-      <div class="row">
-        <div class="col-6">
-          <div class="row justify-content-center">
-            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalCropForm"><img src="static\images\crops.png" class="img-fluid" alt="Responsive image"><br>Crops</a>
+  </div>
+
+  <hr>
+
+  <!-- Crops form -->
+  <form action="{{ url_for('setting') }}" method="POST">
+    {{ form2.csrf_token }}
+    <div class="modal fade" id="modalCropForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true" >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Crops Setting</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+            {{ wtf.form_field(form2.crop_name, placeholder="Eg: Wheat") }}
+
+            {{ wtf.form_field(form2.cropUnit, placeholder ="Eg: Kilograms") }}
+
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            {{ wtf.form_field(form2.submit2, class="btn btn-info") }}
           </div>
 
-          <div class="row justify-content-center">
-            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLivestockForm"><img src="static\images\livestocks.png" class="img-fluid" alt="Responsive image"><br>Livestocks</a>
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Your Crops:</h4>
+          </div>
+          <div>
+            <ul>
+              {% for crop in range(qry_crops|length) %}
+              <li>{{ qry_crops[crop]["cropName"] }} - {{ qry_crops[crop]["unitName"] }}</li>
+              {% endfor %}
+            </ul>
           </div>
         </div>
-
-
-        <div class="col-6">
-          <div class="row justify-content-center">
-            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalCropExForm"><img style="width: 128px; height:128px;" src="static\images\cropExpenses.png" class="img-fluid" alt="Responsive image"><br>Crop Expenses</a>
-          </div>
-
-          <div class="row justify-content-center">
-            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLivestockExForm"><img style="width: 110px; height:110px;" src="static\images\livestockExpenses.png" class="img-fluid" alt="Responsive image"><br>LiveStock Expenses</a>
-          </div>
-        </div>
       </div>
-
     </div>
+  </form>
 
-    <hr>
+  <!-- Crop Expenses form -->
+  <form action="{{ url_for('setting') }}" method="POST">
+    {{ form3.csrf_token }}
+    <div class="modal fade" id="modalCropExForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true" >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Crop Expenses Setting</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+            {{ wtf.form_field(form3.cropEx, placeholder="Eg: Fertilizer") }}
+            {{ wtf.form_field(form3.cropExUnit, placeholder ="Eg: Kilograms") }}
 
-    <!-- Crops form -->
-    <form action="{{ url_for('setting') }}" method="POST">
-      {{ form2.csrf_token }}
-      <div class="modal fade" id="modalCropForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header text-center">
-              <h4 class="modal-title w-100 font-weight-bold">Crops Setting</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body mx-3">
-              {{ wtf.form_field(form2.crop_name, placeholder="Eg: Wheat") }}
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            {{ wtf.form_field(form3.submit3, class="btn btn-info") }}
+          </div>
 
-              {{ wtf.form_field(form2.cropUnit, placeholder ="Eg: Kilograms") }}
-
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-              {{ wtf.form_field(form2.submit2, class="btn btn-info") }}
-            </div>
-
-            <div class="modal-header text-center">
-              <h4 class="modal-title w-100 font-weight-bold">Your Crops:</h4>
-            </div>
-            <div>
-              <ul>
-                {% for crop in range(qry_crops|length) %}
-                <li>{{ qry_crops[crop]["cropName"] }} - {{ qry_crops[crop]["unitName"] }}</li>
-                {% endfor %}
-              </ul>
-            </div>
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Your Crop Expenses:</h4>
+          </div>
+          <div>
+            <ul>
+              {% for cropEx in range(qry_cropEx|length) %}
+              <li>{{ qry_cropEx[cropEx]["cropExName"] }} - {{ qry_cropEx[cropEx]["cropExUnit"] }}</li>
+              {% endfor %}
+            </ul>
           </div>
         </div>
       </div>
-    </form>
+    </div>
+  </form>
 
-    <!-- Crop Expenses form -->
-    <form action="{{ url_for('setting') }}" method="POST">
-      {{ form3.csrf_token }}
-      <div class="modal fade" id="modalCropExForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header text-center">
-              <h4 class="modal-title w-100 font-weight-bold">Crop Expenses Setting</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body mx-3">
-              {{ wtf.form_field(form3.cropEx, placeholder="Eg: Fertilizer") }}
-              {{ wtf.form_field(form3.cropExUnit, placeholder ="Eg: Kilograms") }}
+  <!-- LiveStock form -->
+  <form action="{{ url_for('setting') }}" method="POST">
+    {{ form4.csrf_token }}
+    <div class="modal fade" id="modalLivestockForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true" >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">LiveStock Setting</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+            {{ wtf.form_field(form4.livestock, placeholder="Eg: Chicken") }}
+            {{ wtf.form_field(form4.livestockUnit, placeholder ="Eg: unit") }}
 
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-              {{ wtf.form_field(form3.submit3, class="btn btn-info") }}
-            </div>
-
-            <div class="modal-header text-center">
-              <h4 class="modal-title w-100 font-weight-bold">Your Crop Expenses:</h4>
-            </div>
-            <div>
-              <ul>
-                {% for cropEx in range(qry_cropEx|length) %}
-                <li>{{ qry_cropEx[cropEx]["cropExName"] }} - {{ qry_cropEx[cropEx]["cropExUnit"] }}</li>
-                {% endfor %}
-              </ul>
-            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            {{ wtf.form_field(form4.submit4, class="btn btn-info") }}
+          </div>
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Your Livestocks:</h4>
+          </div>
+          <div>
+            <ul>
+              {% for livestock in range(qry_livestocks|length) %}
+              <li>{{ qry_livestocks[livestock]["livestockName"] }} - {{ qry_livestocks[livestock]["livestockUnit"] }}</li>
+              {% endfor %}
+            </ul>
           </div>
         </div>
       </div>
-    </form>
+    </div>
+  </form>
 
-    <!-- LiveStock form -->
-    <form action="{{ url_for('setting') }}" method="POST">
-      {{ form4.csrf_token }}
-      <div class="modal fade" id="modalLivestockForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header text-center">
-              <h4 class="modal-title w-100 font-weight-bold">LiveStock Setting</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body mx-3">
-              {{ wtf.form_field(form4.livestock, placeholder="Eg: Chicken") }}
-              {{ wtf.form_field(form4.livestockUnit, placeholder ="Eg: unit") }}
+  <!-- LiveStock Expenses form -->
+  <form action="{{ url_for('setting') }}" method="POST">
+    {{ form5.csrf_token }}
+    <div class="modal fade" id="modalLivestockExForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true" >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">LiveStock Expenses Setting</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+            {{ wtf.form_field(form5.livestockEx, placeholder="Eg: Poutry Food") }}
+            {{ wtf.form_field(form5.livestockExUnit, placeholder ="Eg: Kilograms") }}
 
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-              {{ wtf.form_field(form4.submit4, class="btn btn-info") }}
-            </div>
-            <div class="modal-header text-center">
-              <h4 class="modal-title w-100 font-weight-bold">Your Livestocks:</h4>
-            </div>
-            <div>
-              <ul>
-                {% for livestock in range(qry_livestocks|length) %}
-                <li>{{ qry_livestocks[livestock]["livestockName"] }} - {{ qry_livestocks[livestock]["livestockUnit"] }}</li>
-                {% endfor %}
-              </ul>
-            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            {{ wtf.form_field(form5.submit5, class="btn btn-info") }}
+          </div>
+
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Your Livestock Expenses:</h4>
+          </div>
+          <div>
+            <ul>
+              {% for livestockEx in range(qry_livestockEx|length) %}
+              <li>{{ qry_livestockEx[livestockEx]["livestockExName"] }} - {{ qry_livestockEx[livestockEx]["livestockExUnit"] }}</li>
+              {% endfor %}
+            </ul>
           </div>
         </div>
       </div>
-    </form>
+    </div>
+  </form>
 
-    <!-- LiveStock Expenses form -->
-    <form action="{{ url_for('setting') }}" method="POST">
-      {{ form5.csrf_token }}
-      <div class="modal fade" id="modalLivestockExForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header text-center">
-              <h4 class="modal-title w-100 font-weight-bold">LiveStock Expenses Setting</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body mx-3">
-              {{ wtf.form_field(form5.livestockEx, placeholder="Eg: Poutry Food") }}
-              {{ wtf.form_field(form5.livestockExUnit, placeholder ="Eg: Kilograms") }}
-
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-              {{ wtf.form_field(form5.submit5, class="btn btn-info") }}
-            </div>
-
-            <div class="modal-header text-center">
-              <h4 class="modal-title w-100 font-weight-bold">Your Livestock Expenses:</h4>
-            </div>
-            <div>
-              <ul>
-                {% for livestockEx in range(qry_livestockEx|length) %}
-                <li>{{ qry_livestockEx[livestockEx]["livestockExName"] }} - {{ qry_livestockEx[livestockEx]["livestockExUnit"] }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
+</div>
 {% endblock %}
