@@ -43,6 +43,7 @@
             <div class="collapse navbar-collapse" id="navbar">
                 {% if session.user_id %}
                     <ul class="navbar-nav mr-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="#">News</a></li>
                         <li class="nav-item"><a class="nav-link" href="/dailyNotes">Daily Notes</a></li>
                         <li class="nav-item"><a class="nav-link" href="/calculators">Calculators</a></li>
                         <li class="nav-item"><a class="nav-link" href="/yourFarm">Your Farm</a></li>
@@ -54,7 +55,7 @@
                 {% else %}
                     <ul class="navbar-nav ml-auto mt-2">
                         <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/login" data-toggle="modal" data-target="#modalLoginForm">Log In</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
                     </ul>
                 {% endif %}
             </div>
